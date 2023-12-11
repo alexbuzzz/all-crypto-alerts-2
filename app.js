@@ -7,5 +7,9 @@ if (!fs.existsSync(dbFolderPath)) {
   fs.mkdirSync(dbFolderPath)
 }
 
+// Pull data from DB to store
+
+// Save store data in DB by CRON
+
 // Start the Telegram bot
 telegramBot.launch()
