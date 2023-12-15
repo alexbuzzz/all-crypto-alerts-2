@@ -1,7 +1,12 @@
 const store = {
   messageIDs: {},
   users: {},
-  marketData: {},
+  marketData: {
+    lastUpdateTime: 0,
+    bybit: {},
+    okx: {},
+    mexc: {},
+  },
   currentData: {
     bybit: {},
     okx: {},

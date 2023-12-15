@@ -2,10 +2,10 @@ const WebSocket = require('ws')
 
 const store = require('../../store')
 
-const klineStream = () => {
-  let ws
-  let pingInterval
+let ws = null
+let pingInterval = null
 
+const start = () => {
   const connectWebSocket = () => {
     const wsUrl = 'wss://contract.mexc.com/ws'
     ws = new WebSocket(wsUrl)
@@ -38,6 +38,7 @@ const klineStream = () => {
             store.currentData.mexc[symbol].volInCurr = volInCurr
             store.currentData.mexc[symbol].closePrice = closePrice
             store.currentData.mexc[symbol].candleTime = candleTime
+            store.currentData.mexc[symbol].oi = 0 // Temp data while MEXC is not providing OI
           }
         }
       } catch (error) {
@@ -53,7 +54,7 @@ const klineStream = () => {
       console.log('WebSocket connection closed.')
       clearInterval(pingInterval)
       unsubscribeFromAll(ws)
-      setTimeout(connectWebSocket, 5000) // Reconnect after 5 seconds
+      setTimeout(connectWebSocket, 20000) // Reconnect after 20 seconds
     })
   }
 
@@ -103,4 +104,9 @@ const klineStream = () => {
   connectWebSocket()
 }
 
-module.exports = klineStream
+const stop = () => {
+  ws.close()
+  clearInterval(pingInterval)
+}
+
+module.exports = { start, stop }

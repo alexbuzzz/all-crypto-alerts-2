@@ -1,27 +1,32 @@
-const { WebsocketClient } = require('okx-api')
+const { WebsocketClient } = require('bybit-api')
 const store = require('../../store')
 
 let wsClient = null
 
 const start = () => {
-  wsClient = new WebsocketClient()
+  const wsConfig = {
+    market: 'v5',
+    pongTimeout: 1000,
+    pingInterval: 60000,
+    reconnectTimeout: 60000,
+  }
 
-  const symbols = Object.keys(store.currentData.okx)
+  wsClient = new WebsocketClient(wsConfig)
 
-  const subscribeArray = symbols.map((instId) => ({
-    channel: 'open-interest',
-    instId: instId,
-  }))
+  const symbols = Object.keys(store.currentData.bybit)
+  const tickersList = symbols.map((item) => `tickers.${item}`)
 
-  wsClient.subscribe(subscribeArray)
+  wsClient.subscribeV5(tickersList, 'linear')
 
   // Raw data will arrive on the 'update' event
   wsClient.on('update', (data) => {
-    const symbol = data.arg.instId
-    const oi = data.data[0].oi
+    if (data.data.openInterest) {
+      const symbol = data.data.symbol
+      const oi = data.data.openInterest
 
-    if (store.currentData.okx.hasOwnProperty(symbol)) {
-      store.currentData.okx[symbol].oi = oi
+      if (store.currentData.bybit.hasOwnProperty(symbol)) {
+        store.currentData.bybit[symbol].oi = oi
+      }
     }
   })
 

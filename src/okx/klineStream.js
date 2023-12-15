@@ -1,8 +1,10 @@
 const { WebsocketClient } = require('okx-api')
 const store = require('../../store')
 
-const klineStream = () => {
-  const wsClient = new WebsocketClient()
+let wsClient = null
+
+const start = () => {
+  wsClient = new WebsocketClient()
 
   const symbols = Object.keys(store.currentData.okx)
 
@@ -43,4 +45,8 @@ const klineStream = () => {
   })
 }
 
-module.exports = klineStream
+const stop = () => {
+  wsClient.close()
+}
+
+module.exports = { start, stop }
