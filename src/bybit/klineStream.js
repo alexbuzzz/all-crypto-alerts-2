@@ -23,12 +23,18 @@ const start = () => {
     const vol = data.data[0].volume
     const symbol = data.topic.slice(8)
     const candleTime = data.data[0].start
+    const open = data.data[0].open
     const close = data.data[0].close
+    const high = data.data[0].high
+    const low = data.data[0].low
     const volInCurr = Math.round((parseFloat(close) * parseFloat(vol)) / 1000)
 
     if (store.currentData.bybit.hasOwnProperty(symbol)) {
       store.currentData.bybit[symbol].volInCurr = volInCurr
+      store.currentData.bybit[symbol].openPrice = open
       store.currentData.bybit[symbol].closePrice = close
+      store.currentData.bybit[symbol].highPrice = high
+      store.currentData.bybit[symbol].lowPrice = low
       store.currentData.bybit[symbol].candleTime = candleTime
     }
   })

@@ -27,16 +27,12 @@ const start = () => {
           }
 
           if (Object.keys(tempItem).length > 0) {
-            // const currentDataItem = {
-            //   volInCurr: tempItem.volInCurr,
-            //   closePrice: tempItem.closePrice,
-            //   candleTime: tempItem.candleTime,
-            //   oi: tempItem.oi,
-            // }
-
             const historicalItem = {
               volInCurr: tempItem.volInCurr,
+              openPrice: tempItem.openPrice,
               closePrice: tempItem.closePrice,
+              highPrice: tempItem.highPrice,
+              lowPrice: tempItem.lowPrice,
               candleTime: tempItem.candleTime,
               oi: tempItem.oi,
             }

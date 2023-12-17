@@ -17,7 +17,10 @@ const start = () => {
 
   // Raw data will arrive on the 'update' event
   wsClient.on('update', (data) => {
+    const open = data.data[0][1]
     const close = data.data[0][4]
+    const high = data.data[0][2]
+    const low = data.data[0][3]
     const vol = data.data[0][7]
     const volInCurr = Math.round((close * vol) / 1000)
     const symbol = data.arg.instId
@@ -25,7 +28,10 @@ const start = () => {
 
     if (store.currentData.okx.hasOwnProperty(symbol)) {
       store.currentData.okx[symbol].volInCurr = volInCurr
+      store.currentData.okx[symbol].openPrice = open
       store.currentData.okx[symbol].closePrice = close
+      store.currentData.okx[symbol].highPrice = high
+      store.currentData.okx[symbol].lowPrice = low
       store.currentData.okx[symbol].candleTime = candleTime
     }
   })

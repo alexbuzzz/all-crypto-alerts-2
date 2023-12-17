@@ -31,12 +31,18 @@ const start = () => {
         if (jsonMessage.symbol) {
           const symbol = jsonMessage.symbol
           const volInCurr = Math.round(jsonMessage.a)
+          const openPrice = jsonMessage.o
           const closePrice = jsonMessage.c
+          const highPrice = jsonMessage.h
+          const lowPrice = jsonMessage.l
           const candleTime = jsonMessage.t
 
           if (store.currentData.mexc.hasOwnProperty(symbol)) {
             store.currentData.mexc[symbol].volInCurr = volInCurr
+            store.currentData.mexc[symbol].openPrice = openPrice
             store.currentData.mexc[symbol].closePrice = closePrice
+            store.currentData.mexc[symbol].highPrice = highPrice
+            store.currentData.mexc[symbol].lowPrice = lowPrice
             store.currentData.mexc[symbol].candleTime = candleTime
             store.currentData.mexc[symbol].oi = 0 // Temp data while MEXC is not providing OI
           }

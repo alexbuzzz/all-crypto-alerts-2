@@ -3,19 +3,17 @@ const store = {
   users: {},
   marketData: {
     lastUpdateTime: 0,
+    binance: {},
     bybit: {},
     okx: {},
     mexc: {},
   },
   currentData: {
+    binance: {},
     bybit: {},
     okx: {},
     mexc: {},
   },
-
-  save: () => {},
-
-  load: () => {},
 }
 
 module.exports = store
