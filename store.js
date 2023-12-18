@@ -1,6 +1,8 @@
 const store = {
   messageIDs: {},
+
   users: {},
+
   marketData: {
     lastUpdateTime: 0,
     binance: {},
@@ -8,6 +10,7 @@ const store = {
     okx: {},
     mexc: {},
   },
+
   currentData: {
     binance: {},
     bybit: {},

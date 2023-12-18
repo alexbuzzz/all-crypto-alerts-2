@@ -21,6 +21,8 @@ const dbFolderPath = 'database'
 const dataFilePath = path.join(dbFolderPath, 'marketData.json')
 
 const marketDataDb = new JSONdb('database/marketData.json')
+const userDataDb = new JSONdb('database/userData.json')
+const appSettingsDb = new JSONdb('database/appSettings.json')
 
 // Create DB folder if not exists
 if (!fs.existsSync(dbFolderPath)) {
@@ -30,32 +32,47 @@ if (!fs.existsSync(dbFolderPath)) {
 // Pull data from DB to store if pause was less than minute
 if (fs.existsSync(dataFilePath)) {
   const currentTime = Date.now()
+
   const marketData = marketDataDb.get('data')
   if (marketData && currentTime - marketData.lastUpdateTime <= 60 * 1000) {
     store.marketData = marketData
   }
 }
 
+// Pull user settings from DB
+const users = userDataDb.get('users')
+if (users) {
+  store.users = users
+}
+
+// Pull App settings from DB
+const messageIDs = appSettingsDb.get('messageIDs')
+if (messageIDs) {
+  store.messageIDs = messageIDs
+}
+
 // Save store data in DB by CRON
 cron.schedule('*/10 * * * * *', () => {
   marketDataDb.set('data', store.marketData)
+  userDataDb.set('users', store.users)
+  appSettingsDb.set('messageIDs', store.messageIDs)
 })
 
 const start = async () => {
-  await getBinanceSymbols()
-  await getBybitSymbols()
-  await getOKXSymbols()
-  await getMexcSymbols()
-  binanceKlineStream.start()
-  binanceOiStream.start()
-  bybitKlineStream.start()
-  bybitOiStream.start()
-  okxOiStream.start()
-  okxKlineStream.start()
-  mexcKlineStream.start()
-  setTimeout(() => {
-    collectCandles.start()
-  }, 10 * 1000) // Give time to all websockets start
+  // await getBinanceSymbols()
+  // await getBybitSymbols()
+  // await getOKXSymbols()
+  // await getMexcSymbols()
+  // binanceKlineStream.start()
+  // binanceOiStream.start()
+  // bybitKlineStream.start()
+  // bybitOiStream.start()
+  // okxOiStream.start()
+  // okxKlineStream.start()
+  // mexcKlineStream.start()
+  // setTimeout(() => {
+  //   collectCandles.start()
+  // }, 10 * 1000) // Give time to all websockets start
 }
 
 const stop = () => {
