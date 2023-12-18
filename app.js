@@ -31,7 +31,7 @@ if (!fs.existsSync(dbFolderPath)) {
 if (fs.existsSync(dataFilePath)) {
   const currentTime = Date.now()
   const marketData = marketDataDb.get('data')
-  if (currentTime - marketData.lastUpdateTime <= 60 * 1000) {
+  if (marketData && currentTime - marketData.lastUpdateTime <= 60 * 1000) {
     store.marketData = marketData
   }
 }
@@ -55,7 +55,7 @@ const start = async () => {
   mexcKlineStream.start()
   setTimeout(() => {
     collectCandles.start()
-  }, 15 * 1000) // Give time to all websockets start
+  }, 10 * 1000) // Give time to all websockets start
 }
 
 const stop = () => {
@@ -73,6 +73,7 @@ const stop = () => {
 cron.schedule('0 */30 * * *', () => {
   stop()
 
+  // Give time to all websockets stop
   setTimeout(() => {
     start()
   }, 10000)

@@ -30,7 +30,7 @@ const start = () => {
 
         if (jsonMessage.symbol) {
           const symbol = jsonMessage.symbol
-          const volInCurr = Math.round(jsonMessage.a)
+          const volInCurr = Math.round((parseFloat(jsonMessage.q) * parseFloat(jsonMessage.c)) / 1000)
           const openPrice = jsonMessage.o
           const closePrice = jsonMessage.c
           const highPrice = jsonMessage.h

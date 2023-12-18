@@ -22,7 +22,7 @@ const start = () => {
     const high = data.data[0][2]
     const low = data.data[0][3]
     const vol = data.data[0][7]
-    const volInCurr = Math.round((close * vol) / 1000)
+    const volInCurr = Math.round((parseFloat(close) * parseFloat(vol)) / 1000)
     const symbol = data.arg.instId
     const candleTime = data.data[0][0]
 
