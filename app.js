@@ -15,6 +15,8 @@ const okxKlineStream = require('./src/okx/klineStream')
 const getMexcSymbols = require('./src/mexc/getSymbols')
 const mexcKlineStream = require('./src/mexc/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
+const binanceAlerts = require('./src/engine/binanceAlerts')
+
 const store = require('./store')
 
 const dbFolderPath = 'database'
@@ -59,20 +61,21 @@ cron.schedule('*/10 * * * * *', () => {
 })
 
 const start = async () => {
-  // await getBinanceSymbols()
-  // await getBybitSymbols()
-  // await getOKXSymbols()
-  // await getMexcSymbols()
-  // binanceKlineStream.start()
-  // binanceOiStream.start()
-  // bybitKlineStream.start()
-  // bybitOiStream.start()
-  // okxOiStream.start()
-  // okxKlineStream.start()
-  // mexcKlineStream.start()
-  // setTimeout(() => {
-  //   collectCandles.start()
-  // }, 10 * 1000) // Give time to all websockets start
+  await getBinanceSymbols()
+  await getBybitSymbols()
+  await getOKXSymbols()
+  await getMexcSymbols()
+  binanceKlineStream.start()
+  binanceOiStream.start()
+  bybitKlineStream.start()
+  bybitOiStream.start()
+  okxOiStream.start()
+  okxKlineStream.start()
+  mexcKlineStream.start()
+  setTimeout(() => {
+    collectCandles.start()
+    binanceAlerts.start()
+  }, 10 * 1000) // Give time to all websockets start
 }
 
 const stop = () => {

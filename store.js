@@ -1,6 +1,8 @@
 const store = {
   messageIDs: {},
 
+  lastAlertTimes: {},
+
   users: {},
 
   marketData: {
