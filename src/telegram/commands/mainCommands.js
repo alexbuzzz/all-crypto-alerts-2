@@ -36,9 +36,6 @@ const commands = {
             volBoostSetup3: false,
           },
           mexc: {
-            oiSetup1: false,
-            oiSetup2: false,
-            oiSetup3: false,
             volBoostSetup1: false,
             volBoostSetup2: false,
             volBoostSetup3: false,
@@ -58,7 +55,7 @@ const commands = {
       try {
         await ctx.deleteMessage(store.messageIDs[ctx.chat.id])
       } catch (error) {
-        console.error('Error deleting message:', error)
+        // console.error('Error deleting message:', error)
       }
     }
 

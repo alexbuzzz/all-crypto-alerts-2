@@ -18,9 +18,9 @@ const Keyboards = {
 
   bybitVolBoost: () =>
     Markup.inlineKeyboard([
-      [Markup.button.callback('1.5% 1min', 'bybitVolBoostSetup1')],
-      [Markup.button.callback('3% 1min', 'bybitVolBoostSetup2')],
-      [Markup.button.callback('10% 5min', 'bybitVolBoostSetup3')],
+      [Markup.button.callback('5X / 100min', 'bybitVolBoostSetup1')],
+      [Markup.button.callback('8X / 100min', 'bybitVolBoostSetup2')],
+      [Markup.button.callback('12X / 100min', 'bybitVolBoostSetup3')],
       [Markup.button.callback('⬅️ Back', 'bybit')],
     ]),
 }
