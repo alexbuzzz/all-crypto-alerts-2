@@ -11,7 +11,7 @@ const start = () => {
     ws = new WebSocket(wsUrl)
 
     ws.on('open', () => {
-      console.log('WebSocket connection opened.')
+      console.log('MEXC KLINE WebSocket connection opened')
 
       // Set up a ping message to be sent every 20 seconds
       pingInterval = setInterval(() => {
@@ -30,7 +30,9 @@ const start = () => {
 
         if (jsonMessage.symbol) {
           const symbol = jsonMessage.symbol
-          const volInCurr = Math.round((parseFloat(jsonMessage.q) * parseFloat(jsonMessage.c)) / 1000)
+          const volInCurr = Math.round(
+            (parseFloat(jsonMessage.q) * parseFloat(jsonMessage.c)) / 1000
+          )
           const openPrice = jsonMessage.o
           const closePrice = jsonMessage.c
           const highPrice = jsonMessage.h
@@ -57,7 +59,7 @@ const start = () => {
     })
 
     ws.on('close', () => {
-      console.log('WebSocket connection closed.')
+      console.log('MEXC KLINE WebSocket connection closed')
       clearInterval(pingInterval)
       unsubscribeFromAll(ws)
       setTimeout(connectWebSocket, 20000) // Reconnect after 20 seconds
@@ -100,7 +102,6 @@ const start = () => {
 
   // Function to subscribe to all K-line channels
   const subscribeToAll = (ws, interval) => {
-    // const symbols = ['SOL_USDT']
     const symbols = Object.keys(store.currentData.mexc)
     symbols.forEach((symbol) => {
       subscribeToKline(ws, symbol, interval)

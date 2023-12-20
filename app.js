@@ -15,7 +15,7 @@ const okxKlineStream = require('./src/okx/klineStream')
 const getMexcSymbols = require('./src/mexc/getSymbols')
 const mexcKlineStream = require('./src/mexc/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
-const binanceAlerts = require('./src/engine/binanceAlerts')
+const alerts = require('./src/engine/alerts')
 
 const store = require('./store')
 
@@ -73,8 +73,8 @@ const start = async () => {
   okxKlineStream.start()
   mexcKlineStream.start()
   setTimeout(() => {
+    alerts.start()
     collectCandles.start()
-    binanceAlerts.start()
   }, 10 * 1000) // Give time to all websockets start
 }
 
@@ -87,10 +87,11 @@ const stop = () => {
   okxKlineStream.stop()
   mexcKlineStream.stop()
   collectCandles.stop()
+  alerts.stop()
 }
 
-// Restart all every 30 min to get new listed instruments data
-cron.schedule('0 */30 * * *', () => {
+// Restart all every 60 min to get new listed instruments data
+cron.schedule('0 */60 * * *', () => {
   stop()
 
   // Give time to all websockets stop

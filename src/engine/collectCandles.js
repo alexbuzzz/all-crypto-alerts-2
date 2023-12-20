@@ -1,3 +1,4 @@
+require('dotenv').config()
 const store = require('../../store')
 
 let jobInterval = null
@@ -41,10 +42,15 @@ const start = () => {
             store.marketData[exchange][symbol]['currentData'] = currentItem
 
             // Add the new item to historicalData
-            store.marketData[exchange][symbol]['historicalData'].push(historicalItem)
+            store.marketData[exchange][symbol]['historicalData'].push(
+              historicalItem
+            )
 
-            // Check and trim the array if it exceeds 180 items
-            if (store.marketData[exchange][symbol]['historicalData'].length > 180) {
+            // Check and trim the array if it exceeds limit
+            if (
+              store.marketData[exchange][symbol]['historicalData'].length >
+              process.env.CANDLES_LIMIT
+            ) {
               store.marketData[exchange][symbol]['historicalData'].shift() // Remove the oldest item
             }
           }

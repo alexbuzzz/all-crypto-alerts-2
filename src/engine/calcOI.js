@@ -11,25 +11,36 @@ const calcOI = (exchange, symbol, count) => {
   // Use the last 'count' items from historical data
   const filteredHistoricalData = historicalData.slice(-count)
 
-  if (filteredHistoricalData.length < count + 1) {
+  if (filteredHistoricalData.length < count) {
+    return 0
+  }
+
+  // Filter out items without oi
+  const validHistoricalData = filteredHistoricalData.filter(
+    (data) => data.oi != undefined
+  )
+
+  // Check if there are no valid items with oi
+  if (validHistoricalData.length === 0) {
     return 0
   }
 
   // Calculate the average OI from historical data
   const averageOI =
-    filteredHistoricalData.reduce((sum, data) => sum + parseFloat(data.oi), 0) /
-    count
+    validHistoricalData.reduce((sum, data) => sum + parseFloat(data.oi), 0) /
+    validHistoricalData.length
 
   // Get the current data
   const currentData = store.marketData[exchange][symbol].currentData
   const currentOI = parseFloat(currentData.oi)
 
   // Calculate the percentage difference
-  const percentageDifference = Math.round(
-    ((currentOI - averageOI) / averageOI) * 100
-  )
+  const percentageDifference = (
+    ((currentOI - averageOI) / averageOI) *
+    100
+  ).toFixed(1)
 
-  return percentageDifference
+  return parseFloat(percentageDifference)
 }
 
 module.exports = calcOI

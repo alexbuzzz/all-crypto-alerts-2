@@ -1,47 +1,98 @@
-const { WebsocketClient } = require('okx-api')
+const WebSocket = require('ws')
 const store = require('../../store')
 
 let wsClient = null
+let pingInterval
 
 const start = () => {
-  wsClient = new WebsocketClient()
-
   const symbols = Object.keys(store.currentData.okx)
+  const wsEndpoint = 'wss://ws.okx.com:8443/ws/v5/public'
 
-  const subscribeArray = symbols.map((instId) => ({
-    channel: 'open-interest',
-    instId: instId,
-  }))
+  const connectWebSocket = () => {
+    wsClient = new WebSocket(wsEndpoint)
 
-  wsClient.subscribe(subscribeArray)
+    wsClient.on('open', () => {
+      symbols.forEach((symbol) => {
+        subscribeOi(symbol)
+      })
 
-  // Raw data will arrive on the 'update' event
-  wsClient.on('update', (data) => {
-    const symbol = data.arg.instId
-    const oi = data.data[0].oi
+      console.log('OKX OI WebSocket connection opened')
 
-    if (store.currentData.okx.hasOwnProperty(symbol)) {
-      store.currentData.okx[symbol].oi = oi
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('message', (data) => {
+      const message = JSON.parse(data)
+      if (message.data && message.data[0]) {
+        const symbol = message.arg.instId
+        const oi = message.data[0].oi
+
+        if (store.currentData.okx.hasOwnProperty(symbol)) {
+          store.currentData.okx[symbol].oi = oi
+        }
+      }
+
+      clearInterval(pingInterval)
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('close', () => {
+      console.log('OKX OI WebSocket connection closed')
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
+
+    wsClient.on('error', (err) => {
+      console.error('WebSocket error:', err)
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
+  }
+
+  const subscribeOi = (symbol) => {
+    const subscribeMsg = {
+      op: 'subscribe',
+      args: [
+        {
+          channel: 'open-interest',
+          instId: symbol,
+        },
+      ],
     }
-  })
 
-  wsClient.on('open', (data) => {
-    console.log('ws connection opened open:', data.wsKey)
-  })
+    try {
+      wsClient.send(JSON.stringify(subscribeMsg))
+    } catch (error) {
+      console.error('OKX subscribe error', error)
+    }
+  }
 
-  wsClient.on('reconnect', ({ wsKey }) => {
-    console.log('ws automatically reconnecting.... ', wsKey)
-  })
-  wsClient.on('reconnected', (data) => {
-    console.log('ws has reconnected ', data?.wsKey)
-  })
-  wsClient.on('error', (data) => {
-    console.error('ws exception: ', data)
-  })
+  const sendPing = () => {
+    try {
+      wsClient.send('ping')
+    } catch (error) {
+      console.error('Error sending ping:', error)
+    }
+  }
+
+  connectWebSocket()
 }
 
 const stop = () => {
-  wsClient.close()
+  if (wsClient) {
+    wsClient.close()
+    clearInterval(pingInterval)
+  }
 }
 
 module.exports = { start, stop }

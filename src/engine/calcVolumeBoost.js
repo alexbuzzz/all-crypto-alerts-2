@@ -11,16 +11,26 @@ const calcVolume = (exchange, symbol, count) => {
   // Use the last 'count' items from historical data
   const filteredHistoricalData = historicalData.slice(-count)
 
-  if (filteredHistoricalData.length < count + 1) {
+  if (filteredHistoricalData.length < count) {
+    return 0
+  }
+
+  // Filter out items without volInCurr
+  const validHistoricalData = filteredHistoricalData.filter(
+    (data) => data.volInCurr !== undefined
+  )
+
+  // Check if there are no valid items with volInCurr
+  if (validHistoricalData.length === 0) {
     return 0
   }
 
   // Calculate the average Volume from historical data
   const averageVolInCurr =
-    filteredHistoricalData.reduce(
+    validHistoricalData.reduce(
       (sum, data) => sum + parseFloat(data.volInCurr),
       0
-    ) / count
+    ) / validHistoricalData.length
 
   // Get the current data
   const currentData = store.marketData[exchange][symbol].currentData

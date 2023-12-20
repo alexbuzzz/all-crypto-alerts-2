@@ -1,51 +1,142 @@
-const { WebsocketClient } = require('binance')
+const WebSocket = require('ws')
 const store = require('../../store')
 
-let wsClient = null
+let wsClient1 = null
+let wsClient2 = null
+let streams1
+let streams2
 
 const start = () => {
-  const wsConfig = {
-    beautify: true,
-  }
-
-  wsClient = new WebsocketClient(wsConfig)
-
   const symbols = Object.keys(store.currentData.binance)
 
-  symbols.forEach((element) => {
-    wsClient.subscribeKlines(element, '1m', 'usdm', false)
+  if (symbols.length < 200) {
+    streams1 = symbols.map((symbol) => `${symbol.toLowerCase()}@kline_1m`)
+    const wsEndpoint1 =
+      'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
+
+    connectWebSocket1(wsEndpoint1)
+  } else {
+    const first200Symbols = symbols.slice(0, 200)
+    const restOfSymbols = symbols.slice(200)
+
+    streams1 = first200Symbols.map(
+      (symbol) => `${symbol.toLowerCase()}@kline_1m`
+    )
+    streams2 = restOfSymbols.map((symbol) => `${symbol.toLowerCase()}@kline_1m`)
+
+    const wsEndpoint1 =
+      'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
+    const wsEndpoint2 =
+      'wss://fstream.binance.com/stream?streams=' + streams2.join('/')
+
+    connectWebSocket1(wsEndpoint1)
+    connectWebSocket2(wsEndpoint2)
+  }
+}
+
+const connectWebSocket1 = (wsEndpoint) => {
+  wsClient1 = new WebSocket(wsEndpoint)
+
+  wsClient1.on('open', () => {
+    console.log('BINANCE KLINE 1 WebSocket connection opened')
   })
 
-  wsClient.on('message', (data) => {
-    const symbol = data.s
+  wsClient1.on('message', (data) => {
+    const message = JSON.parse(data)
 
-    if (store.currentData.binance.hasOwnProperty(symbol)) {
-      store.currentData.binance[symbol].volInCurr = Math.round(parseFloat(data.k.q) / 1000)
-      store.currentData.binance[symbol].openPrice = data.k.o
-      store.currentData.binance[symbol].closePrice = data.k.c
-      store.currentData.binance[symbol].highPrice = data.k.h
-      store.currentData.binance[symbol].lowPrice = data.k.l
-      store.currentData.binance[symbol].candleTime = data.k.t
+    try {
+      if (message && message.data) {
+        const symbol = message.data.s
+
+        if (store.currentData.binance.hasOwnProperty(symbol)) {
+          store.currentData.binance[symbol].volInCurr = Math.round(
+            parseFloat(message.data.k.q) / 1000
+          )
+          store.currentData.binance[symbol].openPrice = message.data.k.o
+          store.currentData.binance[symbol].closePrice = message.data.k.c
+          store.currentData.binance[symbol].highPrice = message.data.k.h
+          store.currentData.binance[symbol].lowPrice = message.data.k.l
+          store.currentData.binance[symbol].candleTime = message.data.k.t
+        }
+      }
+    } catch (error) {
+      console.error(error)
     }
   })
 
-  wsClient.on('open', (data) => {
-    // console.log('ws connection opened open:', data.wsKey)
+  wsClient1.on('close', () => {
+    console.log('BINANCE KLINE 1 WebSocket connection closed')
+
+    setTimeout(() => {
+      connectWebSocket1(wsEndpoint)
+    }, 20000)
   })
 
-  wsClient.on('reconnecting', ({ wsKey }) => {
-    // console.log('ws automatically reconnecting.... ', wsKey)
+  wsClient1.on('error', (err) => {
+    console.error('WebSocket error:', err)
+
+    setTimeout(() => {
+      connectWebSocket1(wsEndpoint)
+    }, 20000)
   })
-  wsClient.on('reconnected', (data) => {
-    // console.log('ws has reconnected ', data?.wsKey)
+}
+
+const connectWebSocket2 = (wsEndpoint) => {
+  wsClient2 = new WebSocket(wsEndpoint)
+
+  wsClient2.on('open', () => {
+    console.log('BINANCE KLINE 2 WebSocket connection opened')
   })
-  wsClient.on('error', (data) => {
-    console.error('ws exception: ', data)
+
+  wsClient2.on('message', (data) => {
+    const message = JSON.parse(data)
+
+    try {
+      if (message && message.data) {
+        const symbol = message.data.s
+
+        if (store.currentData.binance.hasOwnProperty(symbol)) {
+          store.currentData.binance[symbol].volInCurr = Math.round(
+            parseFloat(message.data.k.q) / 1000
+          )
+          store.currentData.binance[symbol].openPrice = message.data.k.o
+          store.currentData.binance[symbol].closePrice = message.data.k.c
+          store.currentData.binance[symbol].highPrice = message.data.k.h
+          store.currentData.binance[symbol].lowPrice = message.data.k.l
+          store.currentData.binance[symbol].candleTime = message.data.k.t
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
+  wsClient2.on('close', () => {
+    console.log('BINANCE KLINE 2 WebSocket connection closed')
+
+    setTimeout(() => {
+      connectWebSocket2(wsEndpoint)
+    }, 20000)
+  })
+
+  wsClient2.on('error', (err) => {
+    console.error('WebSocket error:', err)
+
+    setTimeout(() => {
+      connectWebSocket2(wsEndpoint)
+    }, 20000)
   })
 }
 
 const stop = () => {
-  wsClient.closeAll()
+  if (wsClient1 && wsClient1.readyState === WebSocket.OPEN) {
+    wsClient1.close()
+    console.log('BINANCE KLINE 1 WebSocket connection closed')
+  }
+  if (wsClient2 && wsClient2.readyState === WebSocket.OPEN) {
+    wsClient2.close()
+    console.log('BINANCE KLINE 2 WebSocket connection closed')
+  }
 }
 
 module.exports = { start, stop }

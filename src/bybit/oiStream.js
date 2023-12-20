@@ -1,52 +1,93 @@
-const { WebsocketClient } = require('bybit-api')
+const WebSocket = require('ws')
 const store = require('../../store')
 
 let wsClient = null
+let pingInterval
 
 const start = () => {
-  const wsConfig = {
-    market: 'v5',
-    pongTimeout: 1000,
-    pingInterval: 60000,
-    reconnectTimeout: 60000,
+  const symbols = Object.keys(store.currentData.bybit)
+  const wsEndpoint = 'wss://stream.bybit.com/v5/public/linear'
+
+  const connectWebSocket = () => {
+    wsClient = new WebSocket(wsEndpoint)
+
+    wsClient.on('open', () => {
+      symbols.forEach((symbol) => {
+        subscribeOi(symbol)
+      })
+
+      console.log('BYBIT OI WebSocket connection opened')
+
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('message', (data) => {
+      const message = JSON.parse(data)
+      if (message.data && message.data.openInterest) {
+        const symbol = message.data.symbol
+        const oi = message.data.openInterest
+
+        if (store.currentData.bybit.hasOwnProperty(symbol)) {
+          store.currentData.bybit[symbol].oi = oi
+        }
+      }
+
+      clearInterval(pingInterval)
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('close', () => {
+      console.log('BYBIT OI WebSocket connection closed')
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
+
+    wsClient.on('error', (err) => {
+      console.error('WebSocket error:', err)
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
   }
 
-  wsClient = new WebsocketClient(wsConfig)
-
-  const symbols = Object.keys(store.currentData.bybit)
-  const tickersList = symbols.map((item) => `tickers.${item}`)
-
-  wsClient.subscribeV5(tickersList, 'linear')
-
-  // Raw data will arrive on the 'update' event
-  wsClient.on('update', (data) => {
-    if (data.data.openInterest) {
-      const symbol = data.data.symbol
-      const oi = data.data.openInterest
-
-      if (store.currentData.bybit.hasOwnProperty(symbol)) {
-        store.currentData.bybit[symbol].oi = oi
-      }
+  const subscribeOi = (symbol) => {
+    const subscribeMsg = {
+      op: 'subscribe',
+      args: [`tickers.${symbol}`],
     }
-  })
 
-  wsClient.on('open', (data) => {
-    console.log('ws connection opened open:', data.wsKey)
-  })
+    try {
+      wsClient.send(JSON.stringify(subscribeMsg))
+    } catch (error) {
+      console.error('BYBIT subscribe error', error)
+    }
+  }
 
-  wsClient.on('reconnect', ({ wsKey }) => {
-    console.log('ws automatically reconnecting.... ', wsKey)
-  })
-  wsClient.on('reconnected', (data) => {
-    console.log('ws has reconnected ', data?.wsKey)
-  })
-  wsClient.on('error', (data) => {
-    console.error('ws exception: ', data)
-  })
+  const sendPing = () => {
+    try {
+      wsClient.send('ping')
+    } catch (error) {
+      console.error('Error sending ping:', error)
+    }
+  }
+
+  connectWebSocket()
 }
 
 const stop = () => {
-  wsClient.close()
+  if (wsClient) {
+    wsClient.close()
+    clearInterval(pingInterval)
+  }
 }
 
 module.exports = { start, stop }

@@ -1,58 +1,111 @@
-const { WebsocketClient } = require('okx-api')
+const WebSocket = require('ws')
 const store = require('../../store')
 
 let wsClient = null
+let pingInterval
 
 const start = () => {
-  wsClient = new WebsocketClient()
-
   const symbols = Object.keys(store.currentData.okx)
+  const wsEndpoint = 'wss://ws.okx.com:8443/ws/v5/business'
 
-  const subscribeArray = symbols.map((instId) => ({
-    channel: 'candle1m',
-    instId: instId,
-  }))
+  const connectWebSocket = () => {
+    wsClient = new WebSocket(wsEndpoint)
 
-  wsClient.subscribe(subscribeArray)
+    wsClient.on('open', () => {
+      symbols.forEach((symbol) => {
+        subscribeKline(symbol)
+      })
 
-  // Raw data will arrive on the 'update' event
-  wsClient.on('update', (data) => {
-    const open = data.data[0][1]
-    const close = data.data[0][4]
-    const high = data.data[0][2]
-    const low = data.data[0][3]
-    const vol = data.data[0][7]
-    const volInCurr = Math.round((parseFloat(close) * parseFloat(vol)) / 1000)
-    const symbol = data.arg.instId
-    const candleTime = data.data[0][0]
+      console.log('OKX KLINE WebSocket connection opened')
 
-    if (store.currentData.okx.hasOwnProperty(symbol)) {
-      store.currentData.okx[symbol].volInCurr = volInCurr
-      store.currentData.okx[symbol].openPrice = open
-      store.currentData.okx[symbol].closePrice = close
-      store.currentData.okx[symbol].highPrice = high
-      store.currentData.okx[symbol].lowPrice = low
-      store.currentData.okx[symbol].candleTime = candleTime
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('message', (data) => {
+      const message = JSON.parse(data)
+      if (message.data && message.data[0]) {
+        const open = message.data[0][1]
+        const close = message.data[0][4]
+        const high = message.data[0][2]
+        const low = message.data[0][3]
+        const vol = message.data[0][7]
+        const volInCurr = Math.round(
+          (parseFloat(close) * parseFloat(vol)) / 1000
+        )
+        const symbol = message.arg.instId
+        const candleTime = message.data[0][0]
+
+        if (store.currentData.okx.hasOwnProperty(symbol)) {
+          store.currentData.okx[symbol].volInCurr = volInCurr
+          store.currentData.okx[symbol].openPrice = open
+          store.currentData.okx[symbol].closePrice = close
+          store.currentData.okx[symbol].highPrice = high
+          store.currentData.okx[symbol].lowPrice = low
+          store.currentData.okx[symbol].candleTime = candleTime
+        }
+      }
+
+      clearInterval(pingInterval)
+      pingInterval = setInterval(() => {
+        sendPing()
+      }, 20000)
+    })
+
+    wsClient.on('close', () => {
+      console.log('OKX KLINE WebSocket connection closed')
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
+
+    wsClient.on('error', (err) => {
+      console.error('WebSocket error:', err)
+      clearInterval(pingInterval)
+
+      setTimeout(() => {
+        connectWebSocket()
+      }, 20000)
+    })
+  }
+
+  const subscribeKline = (symbol) => {
+    const subscribeMsg = {
+      op: 'subscribe',
+      args: [
+        {
+          channel: 'candle1m',
+          instId: symbol,
+        },
+      ],
     }
-  })
 
-  wsClient.on('open', (data) => {
-    console.log('ws connection opened open:', data.wsKey)
-  })
+    try {
+      wsClient.send(JSON.stringify(subscribeMsg))
+    } catch (error) {
+      console.error('OKX subscribe error', error)
+    }
+  }
 
-  wsClient.on('reconnect', ({ wsKey }) => {
-    console.log('ws automatically reconnecting.... ', wsKey)
-  })
-  wsClient.on('reconnected', (data) => {
-    console.log('ws has reconnected ', data?.wsKey)
-  })
-  wsClient.on('error', (data) => {
-    console.error('ws exception: ', data)
-  })
+  const sendPing = () => {
+    try {
+      wsClient.send('ping')
+    } catch (error) {
+      console.error('Error sending ping:', error)
+    }
+  }
+
+  connectWebSocket()
 }
 
 const stop = () => {
-  wsClient.close()
+  if (wsClient) {
+    wsClient.close()
+    clearInterval(pingInterval)
+  }
 }
 
 module.exports = { start, stop }
