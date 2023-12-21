@@ -19,9 +19,9 @@ const Keyboards = {
 
   okxVolBoost: () =>
     Markup.inlineKeyboard([
-      [Markup.button.callback('5X / 100min', 'okxVolBoostSetup1')],
-      [Markup.button.callback('8X / 100min', 'okxVolBoostSetup2')],
-      [Markup.button.callback('12X / 100min', 'okxVolBoostSetup3')],
+      [Markup.button.callback('8X / 100min', 'okxVolBoostSetup1')],
+      [Markup.button.callback('12X / 100min', 'okxVolBoostSetup2')],
+      [Markup.button.callback('20X / 100min', 'okxVolBoostSetup3')],
       [Markup.button.callback('⬅️ Back', 'okx')],
     ]),
 }

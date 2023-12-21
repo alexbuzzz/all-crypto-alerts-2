@@ -213,7 +213,7 @@ const fireAlert = (exchange) => {
       // VOL BOOST SETUP 1 ======================================================
       if (
         store.users[userId][exchange].volBoostSetup1 &&
-        resVolBoost_100min >= 5 &&
+        resVolBoost_100min >= 8 &&
         candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
         (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] ||
           currentTime -
@@ -239,7 +239,7 @@ const fireAlert = (exchange) => {
       // VOL BOOST SETUP 2 ======================================================
       if (
         store.users[userId][exchange].volBoostSetup2 &&
-        resVolBoost_100min >= 8 &&
+        resVolBoost_100min >= 12 &&
         candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
         (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] ||
           currentTime -
@@ -265,7 +265,7 @@ const fireAlert = (exchange) => {
       // VOL BOOST SETUP 3 ======================================================
       if (
         store.users[userId][exchange].volBoostSetup3 &&
-        resVolBoost_100min >= 12 &&
+        resVolBoost_100min >= 20 &&
         candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
         (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] ||
           currentTime -

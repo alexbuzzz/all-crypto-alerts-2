@@ -21,11 +21,11 @@ const editVolBoostMessageText = (ctx) => {
   ctx.editMessageText(
     `<strong>Bybit Volume Boost</strong>\n\n${
       store.users[ctx.chat.id].bybit.volBoostSetup1 ? '✅' : '➖'
-    } 5X / 100min\n\n${
-      store.users[ctx.chat.id].bybit.volBoostSetup2 ? '✅' : '➖'
     } 8X / 100min\n\n${
+      store.users[ctx.chat.id].bybit.volBoostSetup2 ? '✅' : '➖'
+    } 12X / 100min\n\n${
       store.users[ctx.chat.id].bybit.volBoostSetup3 ? '✅' : '➖'
-    } 12X / 100min`,
+    } 20X / 100min`,
     {
       parse_mode: 'HTML',
       ...bybitKeyboards.bybitVolBoost(),
