@@ -9,6 +9,11 @@ const start = () => {
   const wsEndpoint = 'wss://ws.okx.com:8443/ws/v5/public'
 
   const connectWebSocket = () => {
+    // Check if wsClient is already open
+    if (wsClient && wsClient.readyState === WebSocket.OPEN) {
+      return
+    }
+
     wsClient = new WebSocket(wsEndpoint)
 
     wsClient.on('open', () => {
@@ -16,7 +21,7 @@ const start = () => {
         subscribeOi(symbol)
       })
 
-      console.log('OKX OI WebSocket connection opened')
+      console.log('OKX OI opened')
 
       pingInterval = setInterval(() => {
         sendPing()
@@ -25,23 +30,28 @@ const start = () => {
 
     wsClient.on('message', (data) => {
       const message = JSON.parse(data)
-      if (message.data && message.data[0]) {
-        const symbol = message.arg.instId
-        const oi = message.data[0].oi
 
-        if (store.currentData.okx.hasOwnProperty(symbol)) {
-          store.currentData.okx[symbol].oi = oi
+      try {
+        if (message.data && message.data[0]) {
+          const symbol = message.arg.instId
+          const oi = message.data[0].oi
+
+          if (store.currentData.okx.hasOwnProperty(symbol)) {
+            store.currentData.okx[symbol].oi = oi
+          }
         }
-      }
 
-      clearInterval(pingInterval)
-      pingInterval = setInterval(() => {
-        sendPing()
-      }, 20000)
+        clearInterval(pingInterval)
+        pingInterval = setInterval(() => {
+          sendPing()
+        }, 20000)
+      } catch (error) {
+        console.error(error)
+      }
     })
 
     wsClient.on('close', () => {
-      console.log('OKX OI WebSocket connection closed')
+      console.log('OKX OI closed')
       clearInterval(pingInterval)
 
       setTimeout(() => {
@@ -89,7 +99,7 @@ const start = () => {
 }
 
 const stop = () => {
-  if (wsClient) {
+  if (wsClient && wsClient.readyState === WebSocket.OPEN) {
     wsClient.close()
     clearInterval(pingInterval)
   }

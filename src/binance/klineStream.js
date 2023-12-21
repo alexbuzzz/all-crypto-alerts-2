@@ -35,10 +35,15 @@ const start = () => {
 }
 
 const connectWebSocket1 = (wsEndpoint) => {
+  // Check if wsClient1 is already open
+  if (wsClient1 && wsClient1.readyState === WebSocket.OPEN) {
+    return
+  }
+
   wsClient1 = new WebSocket(wsEndpoint)
 
   wsClient1.on('open', () => {
-    console.log('BINANCE KLINE 1 WebSocket connection opened')
+    console.log('BINANCE KLINE 1 opened')
   })
 
   wsClient1.on('message', (data) => {
@@ -65,7 +70,7 @@ const connectWebSocket1 = (wsEndpoint) => {
   })
 
   wsClient1.on('close', () => {
-    console.log('BINANCE KLINE 1 WebSocket connection closed')
+    console.log('BINANCE KLINE 1 closed')
 
     setTimeout(() => {
       connectWebSocket1(wsEndpoint)
@@ -82,10 +87,15 @@ const connectWebSocket1 = (wsEndpoint) => {
 }
 
 const connectWebSocket2 = (wsEndpoint) => {
+  // Check if wsClient2 is already open
+  if (wsClient2 && wsClient2.readyState === WebSocket.OPEN) {
+    return
+  }
+
   wsClient2 = new WebSocket(wsEndpoint)
 
   wsClient2.on('open', () => {
-    console.log('BINANCE KLINE 2 WebSocket connection opened')
+    console.log('BINANCE KLINE 2 opened')
   })
 
   wsClient2.on('message', (data) => {
@@ -112,7 +122,7 @@ const connectWebSocket2 = (wsEndpoint) => {
   })
 
   wsClient2.on('close', () => {
-    console.log('BINANCE KLINE 2 WebSocket connection closed')
+    console.log('BINANCE KLINE 2 closed')
 
     setTimeout(() => {
       connectWebSocket2(wsEndpoint)
@@ -131,11 +141,9 @@ const connectWebSocket2 = (wsEndpoint) => {
 const stop = () => {
   if (wsClient1 && wsClient1.readyState === WebSocket.OPEN) {
     wsClient1.close()
-    console.log('BINANCE KLINE 1 WebSocket connection closed')
   }
   if (wsClient2 && wsClient2.readyState === WebSocket.OPEN) {
     wsClient2.close()
-    console.log('BINANCE KLINE 2 WebSocket connection closed')
   }
 }
 

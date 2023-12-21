@@ -52,6 +52,38 @@ const commands = {
     }
   },
 
+  // TEST
+  test: (ctx) => {
+    const date = new Date(store.marketData.lastUpdateTime)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const seconds = date.getSeconds()
+    let historicalDataLength = 0
+
+    // Time
+    const formattedDateTime = `${day < 10 ? '0' : ''}${day}.${
+      month < 10 ? '0' : ''
+    }${month}.${year} ${hours}:${minutes}:${seconds}`
+
+    // Number of candles
+    if (Object.keys(store.marketData.binance).length > 0) {
+      const firstKey = Object.keys(store.marketData.binance)[0]
+      historicalDataLength =
+        store.marketData.binance[firstKey].historicalData.length
+    }
+
+    const messageText = `Last updated: ${formattedDateTime} UTC\n\nCandles: ${historicalDataLength}`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
   // SETTINGS
   settings: async (ctx) => {
     if (store.messageIDs[ctx.chat.id]) {

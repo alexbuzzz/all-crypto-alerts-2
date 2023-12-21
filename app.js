@@ -98,7 +98,7 @@ const stop = () => {
 }
 
 // Restart all every 60 min to get new listed instruments data
-cron.schedule('0 * * * *', () => {
+cron.schedule('1 * * * *', () => {
   stop()
 
   // Give time to all websockets stop

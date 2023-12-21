@@ -9,6 +9,11 @@ const start = () => {
   const wsEndpoint = 'wss://stream.bybit.com/v5/public/linear'
 
   const connectWebSocket = () => {
+    // Check if wsClient is already open
+    if (wsClient && wsClient.readyState === WebSocket.OPEN) {
+      return
+    }
+
     wsClient = new WebSocket(wsEndpoint)
 
     wsClient.on('open', () => {
@@ -16,7 +21,7 @@ const start = () => {
         subscribeOi(symbol)
       })
 
-      console.log('BYBIT OI WebSocket connection opened')
+      console.log('BYBIT OI opened')
 
       pingInterval = setInterval(() => {
         sendPing()
@@ -24,24 +29,28 @@ const start = () => {
     })
 
     wsClient.on('message', (data) => {
-      const message = JSON.parse(data)
-      if (message.data && message.data.openInterest) {
-        const symbol = message.data.symbol
-        const oi = message.data.openInterest
+      try {
+        const message = JSON.parse(data)
+        if (message.data && message.data.openInterest) {
+          const symbol = message.data.symbol
+          const oi = message.data.openInterest
 
-        if (store.currentData.bybit.hasOwnProperty(symbol)) {
-          store.currentData.bybit[symbol].oi = oi
+          if (store.currentData.bybit.hasOwnProperty(symbol)) {
+            store.currentData.bybit[symbol].oi = oi
+          }
         }
-      }
 
-      clearInterval(pingInterval)
-      pingInterval = setInterval(() => {
-        sendPing()
-      }, 20000)
+        clearInterval(pingInterval)
+        pingInterval = setInterval(() => {
+          sendPing()
+        }, 20000)
+      } catch (error) {
+        console.error(error)
+      }
     })
 
     wsClient.on('close', () => {
-      console.log('BYBIT OI WebSocket connection closed')
+      console.log('BYBIT OI closed')
       clearInterval(pingInterval)
 
       setTimeout(() => {
@@ -84,7 +93,7 @@ const start = () => {
 }
 
 const stop = () => {
-  if (wsClient) {
+  if (wsClient && wsClient.readyState === WebSocket.OPEN) {
     wsClient.close()
     clearInterval(pingInterval)
   }

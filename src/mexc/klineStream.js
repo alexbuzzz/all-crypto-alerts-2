@@ -7,11 +7,16 @@ let pingInterval = null
 
 const start = () => {
   const connectWebSocket = () => {
+    // Check if wsClient is already open
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      return
+    }
+
     const wsUrl = 'wss://contract.mexc.com/ws'
     ws = new WebSocket(wsUrl)
 
     ws.on('open', () => {
-      console.log('MEXC KLINE WebSocket connection opened')
+      console.log('MEXC KLINE opened')
 
       // Set up a ping message to be sent every 20 seconds
       pingInterval = setInterval(() => {
@@ -59,7 +64,7 @@ const start = () => {
     })
 
     ws.on('close', () => {
-      console.log('MEXC KLINE WebSocket connection closed')
+      console.log('MEXC KLINE closed')
       clearInterval(pingInterval)
       unsubscribeFromAll(ws)
       setTimeout(connectWebSocket, 20000) // Reconnect after 20 seconds
@@ -112,8 +117,10 @@ const start = () => {
 }
 
 const stop = () => {
-  ws.close()
-  clearInterval(pingInterval)
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.close()
+    clearInterval(pingInterval)
+  }
 }
 
 module.exports = { start, stop }

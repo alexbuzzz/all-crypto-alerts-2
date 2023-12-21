@@ -9,6 +9,7 @@ const mexcCommands = require('./commands/mexcCommands')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
 bot.start(mainCommands.start)
+bot.hears('/test', mainCommands.test)
 bot.hears('🎛 Settings', mainCommands.settings)
 bot.action('backToMain', mainCommands.backToMain)
 
