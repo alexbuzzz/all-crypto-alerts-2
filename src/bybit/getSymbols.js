@@ -1,7 +1,12 @@
+require('dotenv').config()
 const axios = require('axios')
 const store = require('../../store')
 
 const getSymbols = async () => {
+  const exceptions = process.env.EXCEPTIONS
+    ? process.env.EXCEPTIONS.split(',')
+    : []
+
   try {
     const apiUrl =
       'https://api.bybit.com/v5/market/instruments-info?category=linear'
@@ -13,7 +18,8 @@ const getSymbols = async () => {
         responseData.forEach((element) => {
           if (
             !store.currentData.bybit.hasOwnProperty(element.symbol) &&
-            element.symbol.includes('USDT')
+            element.symbol.includes('USDT') &&
+            !exceptions.includes(element.symbol)
           ) {
             store.currentData.bybit[element.symbol] = {}
           }

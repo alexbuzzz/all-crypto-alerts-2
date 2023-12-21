@@ -68,6 +68,7 @@ const fireAlert = (exchange) => {
   const symbols = Object.keys(store.currentData[exchange])
 
   symbols.forEach((symbol) => {
+    const currentTime = Date.now()
     const resOI_1min = calcOI(exchange, symbol, 1)
     const resOI_5min = calcOI(exchange, symbol, 5)
     const resVolBoost_100min = calcVolumeBoost(exchange, symbol, 10) // Переправити на 100
@@ -83,11 +84,30 @@ const fireAlert = (exchange) => {
     const users = Object.keys(store.users)
 
     users.forEach((userId) => {
-      // OI setup 1
+      // Check and initialize if needed
+      if (!store.lastAlertTimes[userId]) {
+        store.lastAlertTimes[userId] = {}
+      }
+
+      // Check and initialize exchange if needed
+      if (!store.lastAlertTimes[userId][exchange]) {
+        store.lastAlertTimes[userId][exchange] = {}
+      }
+
+      // Check and initialize symbol if needed
+      if (!store.lastAlertTimes[userId][exchange][symbol]) {
+        store.lastAlertTimes[userId][exchange][symbol] = {}
+      }
+
+      // OI SETUP 1
       if (
         store.users[userId][exchange].oiSetup1 &&
-        Math.abs(resOI_1min) > 1.5 &&
-        candleVol >= process.env.VOL_IN_CURRENCY_FILTER
+        Math.abs(resOI_1min) >= 1.5 &&
+        candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
+        (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] ||
+          currentTime -
+            store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] >=
+            process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
       ) {
         sendMessage(
           userId,
@@ -101,12 +121,35 @@ const fireAlert = (exchange) => {
           candleVol,
           resPrice
         )
+        store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] = currentTime
+      }
+
+      // VOL BOOST SETUP 1
+      if (
+        store.users[userId][exchange].volBoostSetup1 &&
+        resVolBoost_100min >= 2 &&
+        candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
+        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] ||
+          currentTime -
+            store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] >=
+            process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      ) {
+        sendMessage(
+          userId,
+          symbol,
+          'Vol Boost',
+          `${resVolBoost_100min}x`,
+          '100min',
+          exchange,
+          resOI_1min,
+          resVolBoost_100min,
+          candleVol,
+          resPrice
+        )
+        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] =
+          currentTime
       }
     })
-
-    if (Math.abs(resOI_1min) > 1.5) {
-      console.log(`1 ${symbol} ${resOI_1min}`)
-    }
   })
 }
 

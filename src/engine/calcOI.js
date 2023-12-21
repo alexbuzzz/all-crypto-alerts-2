@@ -35,10 +35,10 @@ const calcOI = (exchange, symbol, count) => {
   const currentOI = parseFloat(currentData.oi)
 
   // Calculate the percentage difference
-  const percentageDifference = (
-    ((currentOI - averageOI) / averageOI) *
-    100
-  ).toFixed(1)
+  const percentageDifference =
+    averageOI !== 0
+      ? (((currentOI - averageOI) / averageOI) * 100).toFixed(1)
+      : 0
 
   return parseFloat(percentageDifference)
 }

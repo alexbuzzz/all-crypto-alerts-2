@@ -47,10 +47,16 @@ if (users) {
   store.users = users
 }
 
-// Pull App settings from DB
+// Pull message IDs from DB
 const messageIDs = appSettingsDb.get('messageIDs')
 if (messageIDs) {
   store.messageIDs = messageIDs
+}
+
+// Pull last alers times from DB
+const lastAlertTimes = appSettingsDb.get('lastAlertTimes')
+if (lastAlertTimes) {
+  store.lastAlertTimes = lastAlertTimes
 }
 
 // Save store data in DB by CRON
@@ -58,6 +64,7 @@ cron.schedule('*/10 * * * * *', () => {
   marketDataDb.set('data', store.marketData)
   userDataDb.set('users', store.users)
   appSettingsDb.set('messageIDs', store.messageIDs)
+  appSettingsDb.set('lastAlertTimes', store.lastAlertTimes)
 })
 
 const start = async () => {
