@@ -9,7 +9,7 @@ const editOIMessageText = (ctx) => {
       store.users[ctx.chat.id].bybit.oiSetup2 ? '✅' : '➖'
     } 3% 1min\n\n${
       store.users[ctx.chat.id].bybit.oiSetup3 ? '✅' : '➖'
-    } 10% 5min`,
+    } 10% 5min\n\nSide: ${store.users[ctx.chat.id].bybit.oiDirection}`,
     {
       parse_mode: 'HTML',
       ...bybitKeyboards.bybitOI(),
@@ -61,6 +61,22 @@ const commands = {
   bybitOIsetup3: (ctx) => {
     store.users[ctx.chat.id].bybit.oiSetup3 =
       !store.users[ctx.chat.id].bybit.oiSetup3
+
+    editOIMessageText(ctx)
+  },
+
+  bybitOIswitchDirection: (ctx) => {
+    switch (store.users[ctx.chat.id].bybit.oiDirection) {
+      case 'BOTH':
+        store.users[ctx.chat.id].bybit.oiDirection = 'LONG'
+        break
+      case 'LONG':
+        store.users[ctx.chat.id].bybit.oiDirection = 'SHORT'
+        break
+      case 'SHORT':
+        store.users[ctx.chat.id].bybit.oiDirection = 'BOTH'
+        break
+    }
 
     editOIMessageText(ctx)
   },

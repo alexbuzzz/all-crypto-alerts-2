@@ -9,7 +9,7 @@ const editOIMessageText = (ctx) => {
       store.users[ctx.chat.id].okx.oiSetup2 ? '✅' : '➖'
     } 3% 1min\n\n${
       store.users[ctx.chat.id].okx.oiSetup3 ? '✅' : '➖'
-    } 10% 5min`,
+    } 10% 5min\n\nSide: ${store.users[ctx.chat.id].okx.oiDirection}`,
     {
       parse_mode: 'HTML',
       ...okxKeyboards.okxOI(),
@@ -61,6 +61,22 @@ const commands = {
   okxOIsetup3: (ctx) => {
     store.users[ctx.chat.id].okx.oiSetup3 =
       !store.users[ctx.chat.id].okx.oiSetup3
+
+    editOIMessageText(ctx)
+  },
+
+  okxOIswitchDirection: (ctx) => {
+    switch (store.users[ctx.chat.id].okx.oiDirection) {
+      case 'BOTH':
+        store.users[ctx.chat.id].okx.oiDirection = 'LONG'
+        break
+      case 'LONG':
+        store.users[ctx.chat.id].okx.oiDirection = 'SHORT'
+        break
+      case 'SHORT':
+        store.users[ctx.chat.id].okx.oiDirection = 'BOTH'
+        break
+    }
 
     editOIMessageText(ctx)
   },

@@ -9,7 +9,7 @@ const editOIMessageText = (ctx) => {
       store.users[ctx.chat.id].binance.oiSetup2 ? '✅' : '➖'
     } 3% 1min\n\n${
       store.users[ctx.chat.id].binance.oiSetup3 ? '✅' : '➖'
-    } 10% 5min`,
+    } 10% 5min\n\nSide: ${store.users[ctx.chat.id].binance.oiDirection}`,
     {
       parse_mode: 'HTML',
       ...binanceKeyboards.binanceOI(),
@@ -61,6 +61,22 @@ const commands = {
   binanceOIsetup3: (ctx) => {
     store.users[ctx.chat.id].binance.oiSetup3 =
       !store.users[ctx.chat.id].binance.oiSetup3
+
+    editOIMessageText(ctx)
+  },
+
+  binanceOIswitchDirection: (ctx) => {
+    switch (store.users[ctx.chat.id].binance.oiDirection) {
+      case 'BOTH':
+        store.users[ctx.chat.id].binance.oiDirection = 'LONG'
+        break
+      case 'LONG':
+        store.users[ctx.chat.id].binance.oiDirection = 'SHORT'
+        break
+      case 'SHORT':
+        store.users[ctx.chat.id].binance.oiDirection = 'BOTH'
+        break
+    }
 
     editOIMessageText(ctx)
   },

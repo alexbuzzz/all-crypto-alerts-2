@@ -13,6 +13,7 @@ const Keyboards = {
       [Markup.button.callback('1.5% 1min', 'bybitOIsetup1')],
       [Markup.button.callback('3% 1min', 'bybitOIsetup2')],
       [Markup.button.callback('10% 5min', 'bybitOIsetup3')],
+      [Markup.button.callback('↕️ Switch Side', 'bybitOIswitchDirection')],
       [Markup.button.callback('⬅️ Back', 'bybit')],
     ]),
 

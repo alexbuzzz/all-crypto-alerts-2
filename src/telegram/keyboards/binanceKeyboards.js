@@ -13,6 +13,7 @@ const Keyboards = {
       [Markup.button.callback('1.5% 1min', 'binanceOIsetup1')],
       [Markup.button.callback('3% 1min', 'binanceOIsetup2')],
       [Markup.button.callback('10% 5min', 'binanceOIsetup3')],
+      [Markup.button.callback('↕️ Switch Side', 'binanceOIswitchDirection')],
       [Markup.button.callback('⬅️ Back', 'binance')],
     ]),
 
