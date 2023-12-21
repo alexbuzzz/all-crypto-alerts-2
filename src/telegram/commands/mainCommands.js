@@ -75,7 +75,7 @@ const commands = {
         store.marketData.binance[firstKey].historicalData.length
     }
 
-    const messageText = `Last updated: ${formattedDateTime} UTC\n\nCandles: ${historicalDataLength}`
+    const messageText = `Last update: ${formattedDateTime} UTC\n\nCandles: ${historicalDataLength}`
 
     const userIDs = process.env.USER_IDS.split(',')
 
