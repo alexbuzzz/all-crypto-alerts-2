@@ -60,9 +60,9 @@ const sendMessage = async (
   }
 
   const messageText = `<strong>${alertType}</strong> (${headerVal} / ${headerPeriod})\n${exchangeFormated} <code>${symbol
+    .replace('-SWAP', '')
     .replace('-', '')
-    .replace('_', '')
-    .replace('-SWAP', '')}</code>\n${
+    .replace('_', '')}</code>\n${
     oiVal >= process.env.OI_HIGHTLIGHT ? '🔥' : '➖'
   } OI ${oiVal}%\n${
     volBoostVal >= process.env.VOLUME_BOOST_HIGHTLIGHT ? '🔥' : '➖'

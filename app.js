@@ -15,7 +15,9 @@ const okxKlineStream = require('./src/okx/klineStream')
 const getMexcSymbols = require('./src/mexc/getSymbols')
 const mexcKlineStream = require('./src/mexc/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
-const alerts = require('./src/engine/alerts')
+const telegramAlerts = require('./src/engine/telegramAlerts')
+const wsAlerts = require('./src/engine/wsAlerts')
+const wsServer = require('./src/engine/wsServer')
 
 const store = require('./store')
 
@@ -59,12 +61,19 @@ if (lastAlertTimes) {
   store.lastAlertTimes = lastAlertTimes
 }
 
+// Pull last alers WS times from DB
+const lastAlertTimesWS = appSettingsDb.get('lastAlertTimesWS')
+if (lastAlertTimesWS) {
+  store.lastAlertTimesWS = lastAlertTimesWS
+}
+
 // Save store data in DB by CRON
 cron.schedule('*/10 * * * * *', () => {
   marketDataDb.set('data', store.marketData)
   userDataDb.set('users', store.users)
   appSettingsDb.set('messageIDs', store.messageIDs)
   appSettingsDb.set('lastAlertTimes', store.lastAlertTimes)
+  appSettingsDb.set('lastAlertTimesWS', store.lastAlertTimesWS)
 })
 
 const start = async () => {
@@ -79,8 +88,10 @@ const start = async () => {
   okxOiStream.start()
   okxKlineStream.start()
   mexcKlineStream.start()
+  wsServer.start()
   setTimeout(() => {
-    alerts.start()
+    telegramAlerts.start()
+    wsAlerts.start()
     collectCandles.start()
   }, 10 * 1000) // Give time to all websockets start
 }
@@ -94,7 +105,8 @@ const stop = () => {
   okxKlineStream.stop()
   mexcKlineStream.stop()
   collectCandles.stop()
-  alerts.stop()
+  telegramAlerts.stop()
+  wsAlerts.stop()
 }
 
 // Restart all every 60 min to get new listed instruments data

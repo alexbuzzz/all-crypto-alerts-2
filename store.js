@@ -3,6 +3,13 @@ const store = {
 
   lastAlertTimes: {},
 
+  lastAlertTimesWS: {
+    binance: {},
+    bybit: {},
+    okx: {},
+    mexc: {},
+  },
+
   users: {},
 
   marketData: {
