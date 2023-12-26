@@ -26,6 +26,7 @@ bot.action('binanceVolBoost', binanceCommands.binanceVolBoost)
 bot.action('binanceVolBoostSetup1', binanceCommands.binanceVolBoostSetup1)
 bot.action('binanceVolBoostSetup2', binanceCommands.binanceVolBoostSetup2)
 bot.action('binanceVolBoostSetup3', binanceCommands.binanceVolBoostSetup3)
+bot.action('binanceVolBoostSetup4', binanceCommands.binanceVolBoostSetup4)
 
 // Bybit
 bot.action('bybit', bybitCommands.bybit)
@@ -40,6 +41,7 @@ bot.action('bybitVolBoost', bybitCommands.bybitVolBoost)
 bot.action('bybitVolBoostSetup1', bybitCommands.bybitVolBoostSetup1)
 bot.action('bybitVolBoostSetup2', bybitCommands.bybitVolBoostSetup2)
 bot.action('bybitVolBoostSetup3', bybitCommands.bybitVolBoostSetup3)
+bot.action('bybitVolBoostSetup4', bybitCommands.bybitVolBoostSetup4)
 
 // OKX
 bot.action('okx', okxCommands.okx)
@@ -54,6 +56,7 @@ bot.action('okxVolBoost', okxCommands.okxVolBoost)
 bot.action('okxVolBoostSetup1', okxCommands.okxVolBoostSetup1)
 bot.action('okxVolBoostSetup2', okxCommands.okxVolBoostSetup2)
 bot.action('okxVolBoostSetup3', okxCommands.okxVolBoostSetup3)
+bot.action('okxVolBoostSetup4', okxCommands.okxVolBoostSetup4)
 
 // MEXC
 bot.action('mexc', mexcCommands.mexc)
@@ -64,5 +67,6 @@ bot.action('mexcVolBoost', mexcCommands.mexcVolBoost)
 bot.action('mexcVolBoostSetup1', mexcCommands.mexcVolBoostSetup1)
 bot.action('mexcVolBoostSetup2', mexcCommands.mexcVolBoostSetup2)
 bot.action('mexcVolBoostSetup3', mexcCommands.mexcVolBoostSetup3)
+bot.action('mexcVolBoostSetup4', mexcCommands.mexcVolBoostSetup4)
 
 module.exports = bot

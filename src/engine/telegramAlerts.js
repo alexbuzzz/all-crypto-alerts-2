@@ -93,6 +93,7 @@ const fireAlert = (exchange) => {
     const resOI_1min = calcOI(exchange, symbol, 1)
     const resOI_5min = calcOI(exchange, symbol, 5)
     const resVolBoost_100min = calcVolumeBoost(exchange, symbol, 100)
+    const resVolBoost_20min = calcVolumeBoost(exchange, symbol, 20)
     const resPrice = calcPrice(exchange, symbol)
     let candleVol =
       store.marketData[exchange] &&
@@ -285,6 +286,32 @@ const fireAlert = (exchange) => {
           resPrice
         )
         store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] =
+          currentTime
+      }
+
+      // VOL BOOST SETUP 4 ======================================================
+      if (
+        store.users[userId][exchange].volBoostSetup4 &&
+        resVolBoost_20min >= 20 &&
+        candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
+        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] ||
+          currentTime -
+            store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] >=
+            process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      ) {
+        sendMessage(
+          userId,
+          symbol,
+          'Vol Boost',
+          `${resVolBoost_20min}x`,
+          '20min',
+          exchange,
+          resOI_1min,
+          resVolBoost_20min,
+          candleVol,
+          resPrice
+        )
+        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] =
           currentTime
       }
     })

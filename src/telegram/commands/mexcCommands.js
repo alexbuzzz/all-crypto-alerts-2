@@ -25,7 +25,9 @@ const editVolBoostMessageText = (ctx) => {
       store.users[ctx.chat.id].mexc.volBoostSetup2 ? '✅' : '➖'
     } 12X / 100min\n\n${
       store.users[ctx.chat.id].mexc.volBoostSetup3 ? '✅' : '➖'
-    } 20X / 100min`,
+    } 20X / 100min\n\n${
+      store.users[ctx.chat.id].mexc.volBoostSetup4 ? '✅' : '➖'
+    } 20X / 20min`,
     {
       parse_mode: 'HTML',
       ...mexcKeyboards.mexcVolBoost(),
@@ -66,6 +68,14 @@ const commands = {
   mexcVolBoostSetup3: (ctx) => {
     store.users[ctx.chat.id].mexc.volBoostSetup3 =
       !store.users[ctx.chat.id].mexc.volBoostSetup3
+
+    editVolBoostMessageText(ctx)
+  },
+
+  mexcVolBoostSetup4: (ctx) => {
+    store.users[ctx.chat.id].mexc.volBoostSetup4 =
+      !store.users[ctx.chat.id].mexc.volBoostSetup4
+
     editVolBoostMessageText(ctx)
   },
 }
