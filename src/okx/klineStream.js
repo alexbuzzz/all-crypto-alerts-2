@@ -36,7 +36,7 @@ const start = () => {
           const close = message.data[0][4]
           const high = message.data[0][2]
           const low = message.data[0][3]
-          const volInCurr = Math.round(message.data[0][7])
+          const volInCurr = Math.round(parseFloat(message.data[0][7]) / 1000)
 
           const symbol = message.arg.instId
           const candleTime = message.data[0][0]
