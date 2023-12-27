@@ -77,7 +77,7 @@ cron.schedule('*/10 * * * * *', () => {
 })
 
 const start = async () => {
-  await getBinanceSymbols()
+  // await getBinanceSymbols()
   await getBybitSymbols()
   await getOKXSymbols()
   await getMexcSymbols()
