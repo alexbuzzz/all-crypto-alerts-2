@@ -13,7 +13,11 @@ const makeRequest = async (symbol) => {
 
     return response.data
   } catch (error) {
-    if (error.response && error.response.status === 400 && error.response.data.code === -4108) {
+    if (
+      error.response &&
+      error.response.status === 400 &&
+      error.response.data.code === -4108
+    ) {
       // Ignore the specific error with code -4108
       return null
     }
@@ -24,11 +28,13 @@ const makeRequest = async (symbol) => {
 }
 
 // Get OI by CRON
-const getOI = cron.schedule('5,15,25,35,45,55 * * * * *', async () => {
+const getOI = cron.schedule('15,35,55 * * * * *', async () => {
   const symbols = Object.keys(store.currentData.binance)
 
   try {
-    const responses = await Promise.all(symbols.map(async (element) => makeRequest(element)))
+    const responses = await Promise.all(
+      symbols.map(async (element) => makeRequest(element))
+    )
 
     responses.forEach((response) => {
       if (response) {
