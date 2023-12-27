@@ -27,7 +27,9 @@ const editVolBoostMessageText = (ctx) => {
       store.users[ctx.chat.id].bybit.volBoostSetup3 ? '✅' : '➖'
     } 20X / 100min\n\n${
       store.users[ctx.chat.id].bybit.volBoostSetup4 ? '✅' : '➖'
-    } 20X / 20min`,
+    } 20X / 20min\n\n${
+      store.users[ctx.chat.id].bybit.volBoostSetup5 ? '✅' : '➖'
+    } 1X / 1min`,
     {
       parse_mode: 'HTML',
       ...bybitKeyboards.bybitVolBoost(),
@@ -112,6 +114,13 @@ const commands = {
   bybitVolBoostSetup4: (ctx) => {
     store.users[ctx.chat.id].bybit.volBoostSetup4 =
       !store.users[ctx.chat.id].bybit.volBoostSetup4
+
+    editVolBoostMessageText(ctx)
+  },
+
+  bybitVolBoostSetup5: (ctx) => {
+    store.users[ctx.chat.id].bybit.volBoostSetup5 =
+      !store.users[ctx.chat.id].bybit.volBoostSetup5
 
     editVolBoostMessageText(ctx)
   },

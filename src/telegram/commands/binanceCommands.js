@@ -27,7 +27,9 @@ const editVolBoostMessageText = (ctx) => {
       store.users[ctx.chat.id].binance.volBoostSetup3 ? '✅' : '➖'
     } 20X / 100min\n\n${
       store.users[ctx.chat.id].binance.volBoostSetup4 ? '✅' : '➖'
-    } 20X / 20min`,
+    } 20X / 20min\n\n${
+      store.users[ctx.chat.id].binance.volBoostSetup5 ? '✅' : '➖'
+    } 1X / 1min`,
     {
       parse_mode: 'HTML',
       ...binanceKeyboards.binanceVolBoost(),
@@ -112,6 +114,13 @@ const commands = {
   binanceVolBoostSetup4: (ctx) => {
     store.users[ctx.chat.id].binance.volBoostSetup4 =
       !store.users[ctx.chat.id].binance.volBoostSetup4
+
+    editVolBoostMessageText(ctx)
+  },
+
+  binanceVolBoostSetup5: (ctx) => {
+    store.users[ctx.chat.id].binance.volBoostSetup5 =
+      !store.users[ctx.chat.id].binance.volBoostSetup5
 
     editVolBoostMessageText(ctx)
   },

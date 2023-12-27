@@ -27,7 +27,9 @@ const editVolBoostMessageText = (ctx) => {
       store.users[ctx.chat.id].okx.volBoostSetup3 ? '✅' : '➖'
     } 20X / 100min\n\n${
       store.users[ctx.chat.id].okx.volBoostSetup4 ? '✅' : '➖'
-    } 20X / 20min`,
+    } 20X / 20min\n\n${
+      store.users[ctx.chat.id].okx.volBoostSetup5 ? '✅' : '➖'
+    } 1X / 1min`,
     {
       parse_mode: 'HTML',
       ...okxKeyboards.okxVolBoost(),
@@ -111,6 +113,12 @@ const commands = {
   okxVolBoostSetup4: (ctx) => {
     store.users[ctx.chat.id].okx.volBoostSetup4 =
       !store.users[ctx.chat.id].okx.volBoostSetup4
+    editVolBoostMessageText(ctx)
+  },
+
+  okxVolBoostSetup5: (ctx) => {
+    store.users[ctx.chat.id].okx.volBoostSetup5 =
+      !store.users[ctx.chat.id].okx.volBoostSetup5
     editVolBoostMessageText(ctx)
   },
 }

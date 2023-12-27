@@ -20,6 +20,7 @@ const commands = {
             volBoostSetup2: false,
             volBoostSetup3: false,
             volBoostSetup4: false,
+            volBoostSetup5: false,
           },
           bybit: {
             oiSetup1: false,
@@ -30,6 +31,7 @@ const commands = {
             volBoostSetup2: false,
             volBoostSetup3: false,
             volBoostSetup4: false,
+            volBoostSetup5: false,
           },
           okx: {
             oiSetup1: false,
@@ -40,12 +42,14 @@ const commands = {
             volBoostSetup2: false,
             volBoostSetup3: false,
             volBoostSetup4: false,
+            volBoostSetup5: false,
           },
           mexc: {
             volBoostSetup1: false,
             volBoostSetup2: false,
             volBoostSetup3: false,
             volBoostSetup4: false,
+            volBoostSetup5: false,
           },
         }
       }

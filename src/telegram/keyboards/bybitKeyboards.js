@@ -23,6 +23,7 @@ const Keyboards = {
       [Markup.button.callback('12X / 100min', 'bybitVolBoostSetup2')],
       [Markup.button.callback('20X / 100min', 'bybitVolBoostSetup3')],
       [Markup.button.callback('20X / 20min', 'bybitVolBoostSetup4')],
+      [Markup.button.callback('1X / 1min', 'bybitVolBoostSetup5')],
       [Markup.button.callback('⬅️ Back', 'bybit')],
     ]),
 }
