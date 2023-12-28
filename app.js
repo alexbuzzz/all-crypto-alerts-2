@@ -77,12 +77,12 @@ cron.schedule('*/10 * * * * *', () => {
 })
 
 const start = async () => {
-  // await getBinanceSymbols()
+  await getBinanceSymbols()
   await getBybitSymbols()
   await getOKXSymbols()
   await getMexcSymbols()
-  // binanceKlineStream.start()
-  // binanceOiStream.start()
+  binanceKlineStream.start()
+  binanceOiStream.start()
   bybitKlineStream.start()
   bybitOiStream.start()
   okxOiStream.start()
