@@ -68,7 +68,7 @@ if (lastAlertTimesWS) {
 }
 
 // Pull custom filters from DB
-const customFilters = appSettingsDb.get('customFilters')
+const customFilters = userDataDb.get('customFilters')
 if (customFilters) {
   store.customFilters = customFilters
 }
@@ -80,7 +80,7 @@ cron.schedule('*/10 * * * * *', () => {
   appSettingsDb.set('messageIDs', store.messageIDs)
   appSettingsDb.set('lastAlertTimes', store.lastAlertTimes)
   appSettingsDb.set('lastAlertTimesWS', store.lastAlertTimesWS)
-  appSettingsDb.set('customFilters', store.customFilters)
+  userDataDb.set('customFilters', store.customFilters)
 })
 
 const start = async () => {

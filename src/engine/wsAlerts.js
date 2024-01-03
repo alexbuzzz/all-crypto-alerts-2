@@ -18,10 +18,7 @@ const fireAlert = (exchange) => {
     const resVolBoost_20min = calcVolumeBoost(exchange, symbol, 20)
     const resPrice = calcPrice(exchange, symbol)
     let candleVol =
-      store.marketData[exchange] &&
-      store.marketData[exchange][symbol] &&
-      store.marketData[exchange][symbol].currentData &&
-      store.marketData[exchange][symbol].currentData.volInCurr
+      store.marketData[exchange] && store.marketData[exchange][symbol] && store.marketData[exchange][symbol].currentData && store.marketData[exchange][symbol].currentData.volInCurr
         ? store.marketData[exchange][symbol].currentData.volInCurr
         : 0
 
@@ -33,80 +30,40 @@ const fireAlert = (exchange) => {
     // OI 1 MIN =============================================================
     if (
       Math.abs(resOI_1min) >= 1 &&
-      candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
-      (!store.lastAlertTimesWS[exchange][symbol]['oi1'] ||
-        currentTime - store.lastAlertTimesWS[exchange][symbol]['oi1'] >=
-          process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      candleVol >= process.env.DEFAULT_WS_VOL_FILTER &&
+      (!store.lastAlertTimesWS[exchange][symbol]['oi1'] || currentTime - store.lastAlertTimesWS[exchange][symbol]['oi1'] >= process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
     ) {
-      wsServer.sendMarketData(
-        symbol,
-        exchange,
-        'oi1',
-        resOI_1min,
-        resVolBoost_100min,
-        candleVol,
-        resPrice
-      )
+      wsServer.sendMarketData(symbol, exchange, 'oi1', resOI_1min, resVolBoost_100min, candleVol, resPrice)
       store.lastAlertTimesWS[exchange][symbol]['oi1'] = currentTime
     }
 
     // OI 5 MIN =============================================================
     if (
       Math.abs(resOI_5min) >= 1 &&
-      candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
-      (!store.lastAlertTimesWS[exchange][symbol]['oi5'] ||
-        currentTime - store.lastAlertTimesWS[exchange][symbol]['oi5'] >=
-          process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      candleVol >= process.env.DEFAULT_WS_VOL_FILTER &&
+      (!store.lastAlertTimesWS[exchange][symbol]['oi5'] || currentTime - store.lastAlertTimesWS[exchange][symbol]['oi5'] >= process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
     ) {
-      wsServer.sendMarketData(
-        symbol,
-        exchange,
-        'oi5',
-        resOI_5min,
-        resVolBoost_100min,
-        candleVol,
-        resPrice
-      )
+      wsServer.sendMarketData(symbol, exchange, 'oi5', resOI_5min, resVolBoost_100min, candleVol, resPrice)
       store.lastAlertTimesWS[exchange][symbol]['oi5'] = currentTime
     }
 
     // VOL BOOST 100 MIN ======================================================
     if (
       resVolBoost_100min >= 5 &&
-      candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
-      (!store.lastAlertTimesWS[exchange][symbol]['volBoost100'] ||
-        currentTime - store.lastAlertTimesWS[exchange][symbol]['volBoost100'] >=
-          process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      candleVol >= process.env.DEFAULT_WS_VOL_FILTER &&
+      (!store.lastAlertTimesWS[exchange][symbol]['volBoost100'] || currentTime - store.lastAlertTimesWS[exchange][symbol]['volBoost100'] >= process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
     ) {
-      wsServer.sendMarketData(
-        symbol,
-        exchange,
-        'volBoost100',
-        resOI_1min,
-        resVolBoost_100min,
-        candleVol,
-        resPrice
-      )
+      wsServer.sendMarketData(symbol, exchange, 'volBoost100', resOI_1min, resVolBoost_100min, candleVol, resPrice)
       store.lastAlertTimesWS[exchange][symbol]['volBoost100'] = currentTime
     }
 
     // VOL BOOST 20 MIN ======================================================
     if (
       resVolBoost_20min >= 5 &&
-      candleVol >= process.env.VOL_IN_CURRENCY_FILTER &&
-      (!store.lastAlertTimesWS[exchange][symbol]['volBoost20'] ||
-        currentTime - store.lastAlertTimesWS[exchange][symbol]['volBoost20'] >=
-          process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      candleVol >= process.env.DEFAULT_WS_VOL_FILTER &&
+      (!store.lastAlertTimesWS[exchange][symbol]['volBoost20'] || currentTime - store.lastAlertTimesWS[exchange][symbol]['volBoost20'] >= process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
     ) {
-      wsServer.sendMarketData(
-        symbol,
-        exchange,
-        'volBoost20',
-        resOI_1min,
-        resVolBoost_20min,
-        candleVol,
-        resPrice
-      )
+      wsServer.sendMarketData(symbol, exchange, 'volBoost20', resOI_1min, resVolBoost_20min, candleVol, resPrice)
       store.lastAlertTimesWS[exchange][symbol]['volBoost20'] = currentTime
     }
   })

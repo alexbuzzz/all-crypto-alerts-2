@@ -53,9 +53,7 @@ const commands = {
           },
         }
       }
-      ctx.reply(
-        'Welcome to your bot!\n\nGo to menu and press "Settings" to configure alerts.'
-      )
+      ctx.reply('Welcome to your bot!\n\nGo to menu and press "Settings" to configure alerts.')
     }
   },
 
@@ -69,11 +67,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['binanceOI']) {
-      store.customFilters[ctx.chat.id]['binanceOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['binance']) {
+      store.customFilters[ctx.chat.id]['binance'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['binanceOI'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['binance']['oi']) {
+      store.customFilters[ctx.chat.id]['binance']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['binance']['oi'].all = Number(passedNumber)
 
     const messageText = `✅ Binance OI filter set to: ${passedNumber}K`
 
@@ -95,13 +98,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['binanceOI']) {
-      store.customFilters[ctx.chat.id]['binanceOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['binance']) {
+      store.customFilters[ctx.chat.id]['binance'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['binanceOI'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['binance']['oi']) {
+      store.customFilters[ctx.chat.id]['binance']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['binance']['oi'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
 
     const messageText = `✅ Binance OI ${passedSymbol} filter set to: ${passedNumber}K`
 
@@ -122,14 +128,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['binanceVolBoost']) {
-      store.customFilters[ctx.chat.id]['binanceVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['binance']) {
+      store.customFilters[ctx.chat.id]['binance'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['binanceVolBoost'].all =
-      Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['binance']['volBoost']) {
+      store.customFilters[ctx.chat.id]['binance']['volBoost'] = {}
+    }
 
-    const messageText = `✅ Binance Vol Boost filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['binance']['volBoost'].all = Number(passedNumber)
+
+    const messageText = `✅ Binance VolBoost filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -149,15 +159,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['binanceVolBoost']) {
-      store.customFilters[ctx.chat.id]['binanceVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['binance']) {
+      store.customFilters[ctx.chat.id]['binance'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['binanceVolBoost'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['binance']['volBoost']) {
+      store.customFilters[ctx.chat.id]['binance']['volBoost'] = {}
+    }
 
-    const messageText = `✅ Binance Vol Boost ${passedSymbol} filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['binance']['volBoost'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ Binance VolBoost ${passedSymbol} filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -176,11 +189,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['bybitOI']) {
-      store.customFilters[ctx.chat.id]['bybitOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['bybit']) {
+      store.customFilters[ctx.chat.id]['bybit'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['bybitOI'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['bybit']['oi']) {
+      store.customFilters[ctx.chat.id]['bybit']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['bybit']['oi'].all = Number(passedNumber)
 
     const messageText = `✅ Bybit OI filter set to: ${passedNumber}K`
 
@@ -202,13 +220,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['bybitOI']) {
-      store.customFilters[ctx.chat.id]['bybitOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['bybit']) {
+      store.customFilters[ctx.chat.id]['bybit'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['bybitOI'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['bybit']['oi']) {
+      store.customFilters[ctx.chat.id]['bybit']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['bybit']['oi'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
 
     const messageText = `✅ Bybit OI ${passedSymbol} filter set to: ${passedNumber}K`
 
@@ -229,13 +250,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['bybitVolBoost']) {
-      store.customFilters[ctx.chat.id]['bybitVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['bybit']) {
+      store.customFilters[ctx.chat.id]['bybit'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['bybitVolBoost'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['bybit']['volBoost']) {
+      store.customFilters[ctx.chat.id]['bybit']['volBoost'] = {}
+    }
 
-    const messageText = `✅ Bybit Vol Boost filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['bybit']['volBoost'].all = Number(passedNumber)
+
+    const messageText = `✅ Bybit VolBoost filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -255,15 +281,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['bybitVolBoost']) {
-      store.customFilters[ctx.chat.id]['bybitVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['bybit']) {
+      store.customFilters[ctx.chat.id]['bybit'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['bybitVolBoost'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['bybit']['volBoost']) {
+      store.customFilters[ctx.chat.id]['bybit']['volBoost'] = {}
+    }
 
-    const messageText = `✅ Bybit Vol Boost ${passedSymbol} filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['bybit']['volBoost'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ Bybit VolBoost ${passedSymbol} filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -282,11 +311,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['okxOI']) {
-      store.customFilters[ctx.chat.id]['okxOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['okx']) {
+      store.customFilters[ctx.chat.id]['okx'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['okxOI'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['okx']['oi']) {
+      store.customFilters[ctx.chat.id]['okx']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['okx']['oi'].all = Number(passedNumber)
 
     const messageText = `✅ OKX OI filter set to: ${passedNumber}K`
 
@@ -308,13 +342,16 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['okxOI']) {
-      store.customFilters[ctx.chat.id]['okxOI'] = {}
+    if (!store.customFilters[ctx.chat.id]['okx']) {
+      store.customFilters[ctx.chat.id]['okx'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['okxOI'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['okx']['oi']) {
+      store.customFilters[ctx.chat.id]['okx']['oi'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['okx']['oi'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
 
     const messageText = `✅ OKX OI ${passedSymbol} filter set to: ${passedNumber}K`
 
@@ -335,13 +372,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['okxVolBoost']) {
-      store.customFilters[ctx.chat.id]['okxVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['okx']) {
+      store.customFilters[ctx.chat.id]['okx'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['okxVolBoost'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['okx']['volBoost']) {
+      store.customFilters[ctx.chat.id]['okx']['volBoost'] = {}
+    }
 
-    const messageText = `✅ OKX Vol Boost filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['okx']['volBoost'].all = Number(passedNumber)
+
+    const messageText = `✅ OKX VolBoost filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -361,15 +403,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['okxVolBoost']) {
-      store.customFilters[ctx.chat.id]['okxVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['okx']) {
+      store.customFilters[ctx.chat.id]['okx'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['okxVolBoost'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['okx']['volBoost']) {
+      store.customFilters[ctx.chat.id]['okx']['volBoost'] = {}
+    }
 
-    const messageText = `✅ OKX Vol Boost ${passedSymbol} filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['okx']['volBoost'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ OKX VolBoost ${passedSymbol} filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -388,13 +433,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['mexcVolBoost']) {
-      store.customFilters[ctx.chat.id]['mexcVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['mexc']) {
+      store.customFilters[ctx.chat.id]['mexc'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['mexcVolBoost'].all = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['mexc']['volBoost']) {
+      store.customFilters[ctx.chat.id]['mexc']['volBoost'] = {}
+    }
 
-    const messageText = `✅ MEXC Vol Boost filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['mexc']['volBoost'].all = Number(passedNumber)
+
+    const messageText = `✅ MEXC VolBoost filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -414,15 +464,18 @@ const commands = {
     }
 
     // Check and initialize exchange if needed
-    if (!store.customFilters[ctx.chat.id]['mexcVolBoost']) {
-      store.customFilters[ctx.chat.id]['mexcVolBoost'] = {}
+    if (!store.customFilters[ctx.chat.id]['mexc']) {
+      store.customFilters[ctx.chat.id]['mexc'] = {}
     }
 
-    store.customFilters[ctx.chat.id]['mexcVolBoost'][
-      passedSymbol.toUpperCase().replace('USDT', '')
-    ] = Number(passedNumber)
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['mexc']['volBoost']) {
+      store.customFilters[ctx.chat.id]['mexc']['volBoost'] = {}
+    }
 
-    const messageText = `✅ MEXC Vol Boost ${passedSymbol} filter set to: ${passedNumber}K`
+    store.customFilters[ctx.chat.id]['mexc']['volBoost'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ MEXC VolBoost ${passedSymbol} filter set to: ${passedNumber}K`
 
     const userIDs = process.env.USER_IDS.split(',')
 
@@ -440,24 +493,27 @@ const commands = {
       store.customFilters[ctx.chat.id] = {}
     }
 
-    store.customFilters[ctx.chat.id]['binanceOI'] = {}
-    store.customFilters[ctx.chat.id]['binanceOI'].all = Number(passedNumber)
-    store.customFilters[ctx.chat.id]['binanceVolBoost'] = {}
-    store.customFilters[ctx.chat.id]['binanceVolBoost'].all =
-      Number(passedNumber)
+    store.customFilters[ctx.chat.id]['binance'] = {}
+    store.customFilters[ctx.chat.id]['binance']['oi'] = {}
+    store.customFilters[ctx.chat.id]['binance']['oi'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['binance']['volBoost'] = {}
+    store.customFilters[ctx.chat.id]['binance']['volBoost'].all = Number(passedNumber)
 
-    store.customFilters[ctx.chat.id]['bybitOI'] = {}
-    store.customFilters[ctx.chat.id]['bybitOI'].all = Number(passedNumber)
-    store.customFilters[ctx.chat.id]['bybitVolBoost'] = {}
-    store.customFilters[ctx.chat.id]['bybitVolBoost'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['bybit'] = {}
+    store.customFilters[ctx.chat.id]['bybit']['oi'] = {}
+    store.customFilters[ctx.chat.id]['bybit']['oi'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['bybit']['volBoost'] = {}
+    store.customFilters[ctx.chat.id]['bybit']['volBoost'].all = Number(passedNumber)
 
-    store.customFilters[ctx.chat.id]['okxOI'] = {}
-    store.customFilters[ctx.chat.id]['okxOI'].all = Number(passedNumber)
-    store.customFilters[ctx.chat.id]['okxVolBoost'] = {}
-    store.customFilters[ctx.chat.id]['okxVolBoost'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['okx'] = {}
+    store.customFilters[ctx.chat.id]['okx']['oi'] = {}
+    store.customFilters[ctx.chat.id]['okx']['oi'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['okx']['volBoost'] = {}
+    store.customFilters[ctx.chat.id]['okx']['volBoost'].all = Number(passedNumber)
 
-    store.customFilters[ctx.chat.id]['mexcVolBoost'] = {}
-    store.customFilters[ctx.chat.id]['mexcVolBoost'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['mexc'] = {}
+    store.customFilters[ctx.chat.id]['mexc']['volBoost'] = {}
+    store.customFilters[ctx.chat.id]['mexc']['volBoost'].all = Number(passedNumber)
 
     const messageText = `✅ ALL filters set to: ${passedNumber}K`
 
@@ -480,15 +536,12 @@ const commands = {
     let historicalDataLength = 0
 
     // Time
-    const formattedDateTime = `${day < 10 ? '0' : ''}${day}.${
-      month < 10 ? '0' : ''
-    }${month}.${year} ${hours}:${minutes}:${seconds}`
+    const formattedDateTime = `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year} ${hours}:${minutes}:${seconds}`
 
     // Number of candles
     if (Object.keys(store.marketData.binance).length > 0) {
       const firstKey = Object.keys(store.marketData.binance)[0]
-      historicalDataLength =
-        store.marketData.binance[firstKey].historicalData.length
+      historicalDataLength = store.marketData.binance[firstKey].historicalData.length
     }
 
     const messageText = `Last update: ${formattedDateTime} UTC\n\nCandles: ${historicalDataLength}`
@@ -523,10 +576,7 @@ const commands = {
       }
     }
 
-    const message = await ctx.reply(
-      'Select exchange:',
-      mainKeyboards.exchanges()
-    )
+    const message = await ctx.reply('Select exchange:', mainKeyboards.exchanges())
 
     // Save message_id to store
     store.messageIDs[ctx.chat.id] = message.message_id

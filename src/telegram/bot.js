@@ -12,6 +12,7 @@ bot.start(mainCommands.start)
 bot.hears('/test', mainCommands.test)
 bot.hears('/filters', mainCommands.filters)
 bot.hears('/settings', mainCommands.settings)
+bot.hears('🎛 Settings', mainCommands.settings)
 bot.action('backToMain', mainCommands.backToMain)
 
 // Vol Filters
