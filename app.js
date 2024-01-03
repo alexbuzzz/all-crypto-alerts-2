@@ -67,6 +67,12 @@ if (lastAlertTimesWS) {
   store.lastAlertTimesWS = lastAlertTimesWS
 }
 
+// Pull custom filters from DB
+const customFilters = appSettingsDb.get('customFilters')
+if (customFilters) {
+  store.customFilters = customFilters
+}
+
 // Save store data in DB by CRON
 cron.schedule('*/10 * * * * *', () => {
   marketDataDb.set('data', store.marketData)
@@ -74,6 +80,7 @@ cron.schedule('*/10 * * * * *', () => {
   appSettingsDb.set('messageIDs', store.messageIDs)
   appSettingsDb.set('lastAlertTimes', store.lastAlertTimes)
   appSettingsDb.set('lastAlertTimesWS', store.lastAlertTimesWS)
+  appSettingsDb.set('customFilters', store.customFilters)
 })
 
 const start = async () => {

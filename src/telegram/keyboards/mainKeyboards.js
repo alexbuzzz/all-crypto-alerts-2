@@ -1,13 +1,6 @@
 const { Markup } = require('telegraf')
 
 const Keyboards = {
-  settings: () => ({
-    reply_markup: {
-      keyboard: [[{ text: '🎛 Settings' }]],
-      resize_keyboard: true,
-    },
-  }),
-
   exchanges: () =>
     Markup.inlineKeyboard([
       [Markup.button.callback('Binance', 'binance')],

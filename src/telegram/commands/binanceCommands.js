@@ -40,7 +40,7 @@ const editVolBoostMessageText = (ctx) => {
 const commands = {
   // BINANCE
   binance: (ctx) => {
-    ctx.editMessageText('Select alert type:', binanceKeyboards.alertTypes())
+    ctx.editMessageText('Binance alert type:', binanceKeyboards.alertTypes())
   },
 
   // BINANCE OI

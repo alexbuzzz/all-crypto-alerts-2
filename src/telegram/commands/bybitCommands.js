@@ -40,7 +40,7 @@ const editVolBoostMessageText = (ctx) => {
 const commands = {
   // BYBIT
   bybit: (ctx) => {
-    ctx.editMessageText('Select alert type:', bybitKeyboards.alertTypes())
+    ctx.editMessageText('Bybit alert type:', bybitKeyboards.alertTypes())
   },
 
   // BYBIT OI

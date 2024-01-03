@@ -99,7 +99,9 @@ const start = () => {
 
   const sendPing = () => {
     try {
-      wsClient.send('ping')
+      if (wsClient && wsClient.readyState === WebSocket.OPEN) {
+        wsClient.send('ping')
+      }
     } catch (error) {
       console.error('Error sending ping:', error)
     }

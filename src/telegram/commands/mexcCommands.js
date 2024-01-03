@@ -40,7 +40,7 @@ const editVolBoostMessageText = (ctx) => {
 const commands = {
   // MEXC
   mexc: (ctx) => {
-    ctx.editMessageText('Select alert type:', mexcKeyboards.alertTypes())
+    ctx.editMessageText('MEXC alert type:', mexcKeyboards.alertTypes())
   },
 
   // MEXC OI

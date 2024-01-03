@@ -10,8 +10,36 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 bot.start(mainCommands.start)
 bot.hears('/test', mainCommands.test)
-bot.hears('🎛 Settings', mainCommands.settings)
+bot.hears('/filters', mainCommands.filters)
+bot.hears('/settings', mainCommands.settings)
 bot.action('backToMain', mainCommands.backToMain)
+
+// Vol Filters
+bot.hears(/binance_oi_(\d+)/i, mainCommands.binanceOI)
+bot.hears(/binance_oi_([A-Za-z]+)_(\d+)/i, mainCommands.binanceOISymbol)
+bot.hears(/binance_vol_boost_(\d+)/i, mainCommands.binanceVolBoost)
+bot.hears(
+  /binance_vol_boost_([A-Za-z]+)_(\d+)/i,
+  mainCommands.binanceVolBoostSymbol
+)
+
+bot.hears(/bybit_oi_(\d+)/i, mainCommands.bybitOI)
+bot.hears(/bybit_oi_([A-Za-z]+)_(\d+)/i, mainCommands.bybitOISymbol)
+bot.hears(/bybit_vol_boost_(\d+)/i, mainCommands.bybitVolBoost)
+bot.hears(
+  /bybit_vol_boost_([A-Za-z]+)_(\d+)/i,
+  mainCommands.bybitVolBoostSymbol
+)
+
+bot.hears(/okx_oi_(\d+)/i, mainCommands.okxOI)
+bot.hears(/okx_oi_([A-Za-z]+)_(\d+)/i, mainCommands.okxOISymbol)
+bot.hears(/okx_vol_boost_(\d+)/i, mainCommands.okxVolBoost)
+bot.hears(/okx_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.okxVolBoostSymbol)
+
+bot.hears(/mexc_vol_boost_(\d+)/i, mainCommands.mexcVolBoost)
+bot.hears(/mexc_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.mexcVolBoostSymbol)
+
+bot.hears(/make_all_(\d+)/i, mainCommands.makeAllFiltersAs)
 
 // Binance
 bot.action('binance', binanceCommands.binance)

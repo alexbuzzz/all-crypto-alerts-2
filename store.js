@@ -3,6 +3,8 @@ const store = {
 
   lastAlertTimes: {},
 
+  customFilters: {},
+
   lastAlertTimesWS: {
     binance: {},
     bybit: {},

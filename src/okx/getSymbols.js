@@ -11,7 +11,7 @@ const getSymbols = async () => {
     const apiUrl = 'https://www.okx.com/api/v5/public/instruments?instType=SWAP'
     const response = await axios.get(apiUrl)
 
-    if (response.status == 200) {
+    if (response && response.status == 200) {
       const responseData = response.data.data
       if (Array.isArray(responseData)) {
         responseData.forEach((element) => {

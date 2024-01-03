@@ -74,7 +74,10 @@ const start = () => {
     const pingMsg = JSON.stringify({
       method: 'ping',
     })
-    ws.send(pingMsg)
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(pingMsg)
+    }
   }
 
   // Function to subscribe to the K-line channel

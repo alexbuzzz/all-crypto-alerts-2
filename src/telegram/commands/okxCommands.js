@@ -40,7 +40,7 @@ const editVolBoostMessageText = (ctx) => {
 const commands = {
   // OKX
   okx: (ctx) => {
-    ctx.editMessageText('Select alert type:', okxKeyboards.alertTypes())
+    ctx.editMessageText('OKX alert type:', okxKeyboards.alertTypes())
   },
 
   // OKX OI
