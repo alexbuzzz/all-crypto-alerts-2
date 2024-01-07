@@ -35,15 +35,7 @@ const start = () => {
 }
 
 // SEND MARKET DATA MESSAGE
-const sendMarketData = (
-  symbol,
-  exchange,
-  alertType,
-  oiVal,
-  volBoostVal,
-  candleVolVal,
-  priceChangeVal
-) => {
+const sendMarketData = (symbol, exchange, resOI_1, resOI_5, resOI_15, resOI_30, resOI_60, resVolBoost_1, resVolBoost_5, resVolBoost_15, resVolBoost_30, resVolBoost_60, candleVol, resPrice) => {
   if (wsServer && wsServer.clients) {
     wsServer.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
@@ -51,16 +43,20 @@ const sendMarketData = (
           JSON.stringify({
             messageType: 'marketData',
             data: {
-              symbol: symbol
-                .replace('-SWAP', '')
-                .replace('-', '')
-                .replace('_', ''),
+              symbol: symbol.replace('-SWAP', '').replace('-', '').replace('_', ''),
               exchange: exchange,
-              alertType: alertType,
-              oi: oiVal,
-              volBoost: volBoostVal,
-              candleVol: candleVolVal,
-              priceChange: priceChangeVal,
+              oi_1: resOI_1,
+              oi_5: resOI_5,
+              oi_15: resOI_15,
+              oi_30: resOI_30,
+              oi_60: resOI_60,
+              volBoost_1: resVolBoost_1,
+              volBoost_5: resVolBoost_5,
+              volBoost_15: resVolBoost_15,
+              volBoost_30: resVolBoost_30,
+              volBoost_60: resVolBoost_60,
+              candleVol: candleVol,
+              priceChange: resPrice,
             },
           })
         )
