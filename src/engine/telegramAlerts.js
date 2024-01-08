@@ -217,7 +217,7 @@ const start = () => {
     fireAlert('bybit')
     fireAlert('okx')
     fireAlert('mexc')
-  }, process.env.CALC_INTERVAL_SECONDS * 1000)
+  }, process.env.CALC_INTERVAL_SECONDS_TELEGRAM * 1000)
 }
 
 const stop = () => {
