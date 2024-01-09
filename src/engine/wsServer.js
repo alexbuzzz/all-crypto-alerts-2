@@ -35,7 +35,23 @@ const start = () => {
 }
 
 // SEND MARKET DATA MESSAGE
-const sendMarketData = (symbol, exchange, resOI_1, resOI_5, resOI_15, resOI_30, resOI_60, resVolBoost_1, resVolBoost_5, resVolBoost_15, resVolBoost_30, resVolBoost_60, candleVol, resPrice) => {
+const sendMarketData = (
+  symbol,
+  exchange,
+  resOI_1,
+  resOI_5,
+  resOI_15,
+  resOI_30,
+  resOI_60,
+  resVolBoost_1,
+  resVolBoost_5,
+  resVolBoost_15,
+  resVolBoost_30,
+  resVolBoost_60,
+  resVolBoost_100,
+  candleVol,
+  resPrice
+) => {
   if (wsServer && wsServer.clients) {
     wsServer.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
@@ -55,6 +71,7 @@ const sendMarketData = (symbol, exchange, resOI_1, resOI_5, resOI_15, resOI_30, 
               volBoost_15: resVolBoost_15,
               volBoost_30: resVolBoost_30,
               volBoost_60: resVolBoost_60,
+              volBoost_100: resVolBoost_100,
               candleVol: candleVol,
               priceChange: resPrice,
             },

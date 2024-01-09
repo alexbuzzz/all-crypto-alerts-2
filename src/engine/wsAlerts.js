@@ -22,6 +22,7 @@ const fireAlert = (exchange) => {
     const resVolBoost_15 = calcVolumeBoost(exchange, symbol, 15)
     const resVolBoost_30 = calcVolumeBoost(exchange, symbol, 30)
     const resVolBoost_60 = calcVolumeBoost(exchange, symbol, 60)
+    const resVolBoost_100 = calcVolumeBoost(exchange, symbol, 100)
     const resPrice = calcPrice(exchange, symbol)
     let candleVol =
       store.marketData[exchange] && store.marketData[exchange][symbol] && store.marketData[exchange][symbol].currentData && store.marketData[exchange][symbol].currentData.volInCurr
@@ -38,11 +39,28 @@ const fireAlert = (exchange) => {
         resVolBoost_5 >= 5 ||
         resVolBoost_15 >= 5 ||
         resVolBoost_30 >= 5 ||
-        resVolBoost_60 >= 5) &&
+        resVolBoost_60 >= 5 ||
+        resVolBoost_100 >= 5) &&
       candleVol >= process.env.DEFAULT_WS_VOL_FILTER &&
-      (!store.lastAlertTimesWS[exchange][symbol] || currentTime - store.lastAlertTimesWS[exchange][symbol] >= process.env.ALERT_SUSPEND_MINUTES * 60 * 1000)
+      (!store.lastAlertTimesWS[exchange][symbol] || currentTime - store.lastAlertTimesWS[exchange][symbol] >= process.env.ALERT_SUSPEND_SECONDS_WS * 1000)
     ) {
-      wsServer.sendMarketData(symbol, exchange, resOI_1, resOI_5, resOI_15, resOI_30, resOI_60, resVolBoost_1, resVolBoost_5, resVolBoost_15, resVolBoost_30, resVolBoost_60, candleVol, resPrice)
+      wsServer.sendMarketData(
+        symbol,
+        exchange,
+        resOI_1,
+        resOI_5,
+        resOI_15,
+        resOI_30,
+        resOI_60,
+        resVolBoost_1,
+        resVolBoost_5,
+        resVolBoost_15,
+        resVolBoost_30,
+        resVolBoost_60,
+        resVolBoost_100,
+        candleVol,
+        resPrice
+      )
       store.lastAlertTimesWS[exchange][symbol] = currentTime
     }
   })
